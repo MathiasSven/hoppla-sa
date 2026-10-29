@@ -155,6 +155,11 @@ PlasmaExtras.Representation {
         required property ListModel listModel
         required property Component listDelegate
 
+        // Delegates place their trailing controls with their own inset, but
+        // their leading icon otherwise touches the panel edge.
+        leftPadding: Math.round(Kirigami.Units.gridUnit / 2)
+        topPadding: Math.round(Kirigami.Units.gridUnit / 2)
+
         implicitHeight: Math.min(content.contentHeight + topPadding + bottomPadding,
         Kirigami.Units.gridUnit * 40)
 
