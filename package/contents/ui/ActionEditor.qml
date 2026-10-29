@@ -21,7 +21,7 @@ import QtQuick.Layouts
 import QtQuick.Controls
 import QtGraphicalEffects 
 import org.kde.plasma.core as PlasmaCore
-import "code/hue.js" as Hue
+import "../code/hue.js" as Hue
 
 
 ColumnLayout {

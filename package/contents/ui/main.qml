@@ -31,7 +31,7 @@ import org.kde.plasma.plasmoid
 import org.kde.kcmutils as KCMUtils
 import org.kde.config as KConfig
 
-import "code/hue.js" as Hue
+import "../code/hue.js" as Hue
 
 PlasmoidItem {
     id: main
@@ -91,7 +91,7 @@ PlasmoidItem {
 
 
     function debugPrint(msg) {
-        Hue.debugPrint(msg)
+        Hue.dbgPrint(msg)
     }
     
     function initHueConfig() {

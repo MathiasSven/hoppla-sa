@@ -25,7 +25,7 @@ import org.kde.plasma.extras as PlasmaExtras
 import org.kde.ksvg as KSvg
 import org.kde.kirigami as Kirigami
 
-import "code/hue.js" as Hue
+import "../code/hue.js" as Hue
 
 PlasmaComponents.ItemDelegate {
     id: actionItem
@@ -35,6 +35,7 @@ PlasmaComponents.ItemDelegate {
     
     height:  Math.max(Kirigami.Units.iconSizes.medium, actionLabel.height + actionInfoLabel.height) + Math.round(Kirigami.Units.gridUnit / 2)
     enabled: true
+    hoverEnabled: true
     
     Item {
         id: actionItemBase
@@ -113,14 +114,9 @@ PlasmaComponents.ItemDelegate {
             }
 
             text: i18n("OK")
-            opacity: actionItem.containsMouse ? 1 : 0
-            visible: true // TODO: FIXME
-
-            Behavior on opacity {
-                NumberAnimation {
-                    duration: Kirigami.Units.shortDuration
-                }
-            }
+            // Plasma 6 ItemDelegate does not enable hover tracking by default.
+            // Keep the action available for pointer, touch, and keyboard users.
+            visible: true
 
             onClicked: execute()
         }

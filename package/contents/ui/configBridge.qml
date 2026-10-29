@@ -22,7 +22,7 @@ import QtQuick.Layouts
 import org.kde.plasma.core as PlasmaCore
 import org.kde.coreaddons as KCoreAddons
 import org.kde.kirigami as Kirigami
-import "code/hue.js" as Hue
+import "../code/hue.js" as Hue
 import org.kde.kirigami as Kirigami
 import org.kde.kcmutils as KCM
 

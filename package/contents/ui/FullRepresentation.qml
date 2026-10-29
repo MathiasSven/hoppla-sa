@@ -30,6 +30,8 @@ import org.kde.plasma.plasmoid
 PlasmaExtras.Representation {
         id: fullRep
 
+        implicitHeight: header.implicitHeight + contentView.implicitHeight
+
         KeyNavigation.down: tabBar.currentItem
 
 
@@ -139,51 +141,40 @@ PlasmaExtras.Representation {
             required property ListModel listModel
             required property Component listDelegate
 
-
+            implicitHeight: Math.min(content.contentHeight + topPadding + bottomPadding,
+                                     Kirigami.Units.gridUnit * 40)
 
             Loader {
                 parent: scrollView
                 anchors.centerIn: parent
                 width: parent.width -  Kirigami.Units.gridUnit * 4
                 active: visible
-                visible: scrollView.listModel.length < 1
+                visible: scrollView.listModel.count < 1
                 sourceComponent: PlasmaExtras.PlaceholderMessage {
                     iconName: scrollView.iconName
                     text: scrollView.placeholderText
                 }
             }
-            contentItem: Flickable {
-                contentHeight: layout.implicitHeight
+            contentItem: ListView {
+                id: content
+                model: scrollView.listModel
+                delegate: scrollView.listDelegate
                 clip: true
+                boundsBehavior: Flickable.StopAtBounds
 
-                ColumnLayout {
-                    id: layout
-                    width: parent.width
-                    spacing: 0
-                    ListView {
-                        id: content
-                        visible: true
-                        interactive: false
-                        Layout.fillWidth: true
-                        implicitHeight: contentHeight
-                        model: scrollView.listModel
-                        delegate: scrollView.listDelegate
-
-                        Keys.onDownPressed: event => {
-                            if (currentIndex < count - 1) {
-                                incrementCurrentIndex();
-                                currentItem.forceActiveFocus();
-                            }
-                            event.accepted = true;
-                        }
-                        Keys.onUpPressed: event => {
-                            if (currentIndex > 0) {
-                                decrementCurrentIndex();
-                                currentItem.forceActiveFocus();
-                            }
-                            event.accepted = true;
-                        }
+                Keys.onDownPressed: event => {
+                    if (currentIndex < count - 1) {
+                        incrementCurrentIndex();
+                        currentItem.forceActiveFocus();
                     }
+                    event.accepted = true;
+                }
+                Keys.onUpPressed: event => {
+                    if (currentIndex > 0) {
+                        decrementCurrentIndex();
+                        currentItem.forceActiveFocus();
+                    }
+                    event.accepted = true;
                 }
             }
         }

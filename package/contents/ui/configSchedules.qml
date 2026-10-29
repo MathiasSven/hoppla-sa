@@ -22,7 +22,7 @@ import QtQuick.Controls
 import QtQuick.Dialogs
 import org.kde.plasma.core as PlasmaCore
 import org.kde.kcoreaddons as KCoreAddons
-import "code/hue.js" as Hue
+import "../code/hue.js" as Hue
 
 
 Item {
