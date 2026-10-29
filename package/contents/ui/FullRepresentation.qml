@@ -202,31 +202,33 @@ PlasmaExtras.Representation {
         getHueConfigured();
         reInit(true, true);
         resetTimer();
-        compactRepresentationItem.fullRepresentationInitialized = true;
+        if (compactRepresentationItem) {
+            compactRepresentationItem.fullRepresentationInitialized = true;
+        }
     }
 
     Connections {
         target: plasmoid.configuration
 
-        onBaseURLChanged: {
+        function onBaseURLChanged() {
             initHueConfig();
             checkHueConnection(updatedConnection, true);
         }
 
-        onPollChanged: {
+        function onPollChanged() {
             resetTimer();
         }
 
-        onPollTimeChanged: {
+        function onPollTimeChanged() {
             resetTimer();
         }
 
-        onAuthTokenChanged: {
+        function onAuthTokenChanged() {
             initHueConfig();
             checkHueConnection(updatedConnection, true);
         }
 
-        onActionlistChanged: {
+        function onActionlistChanged() {
             addActions();
         }
     }

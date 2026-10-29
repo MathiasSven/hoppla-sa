@@ -67,14 +67,14 @@ MouseArea {
         resetTimer();
     }
 
-        Connections {
+    Connections {
         target: plasmoid.configuration
 
-        onPollChanged: {
+        function onPollChanged() {
             resetTimer();
         }
 
-        onPollTimeChanged: {
+        function onPollTimeChanged() {
             resetTimer();
         }
     }
