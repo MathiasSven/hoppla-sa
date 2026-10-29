@@ -18,12 +18,10 @@
 
 import QtQuick
 import QtQuick.Layouts
-import org.kde.plasma.core as PlasmaCore
 import org.kde.plasma.components as PlasmaComponents
-import org.kde.plasma.extras as PlasmaExtras
 import org.kde.kirigami as Kirigami
 
-PlasmaExtras.ExpandableListItem  {
+Item {
     id: lightItem
 
     property bool expanded : false
@@ -32,9 +30,8 @@ PlasmaExtras.ExpandableListItem  {
     property string defaultIcon : "help-about"
     property bool available : vreachable
 
+    width: ListView.view ? ListView.view.width : 0
     height: expanded ? baseHeight + lightTabBar.height + lightDetailsItem.height : baseHeight
-    // TODO: needed? checked: containsMouse
-    enabled: true
 
     // Set an auto updater
     Component.onCompleted: {
@@ -65,6 +62,9 @@ PlasmaExtras.ExpandableListItem  {
 
     MouseArea {
         id: lightItemBase
+        // Let the outer ListView handle touchpad scroll gestures instead of
+        // claiming them for the click-to-expand area.
+        scrollGestureEnabled: false
 
         // Hidden value so we can have a timestamp of the last update,
         // also used to update the GUI components when new values from hue arrive.
@@ -491,4 +491,3 @@ PlasmaExtras.ExpandableListItem  {
         id: lightTimer
     }
 }
-

@@ -19,14 +19,12 @@
 
 import QtQuick
 import QtQuick.Layouts
-import org.kde.plasma.core as PlasmaCore
 import org.kde.plasma.components as PlasmaComponents
 import QtQuick.Controls as QtControls
-import org.kde.plasma.extras as PlasmaExtras
 import org.kde.kirigami as Kirigami
 
 
-PlasmaExtras.ExpandableListItem  {
+Item {
     id: groupItem
 
     property bool expanded : false
@@ -37,10 +35,8 @@ PlasmaExtras.ExpandableListItem  {
     // As for now, groups are always available when given by the bridge
     property bool available : true
 
-
+    width: ListView.view ? ListView.view.width : 0
     height: expanded ? baseHeight + groupTabBar.height + groupDetailsItem.height : baseHeight
-    //TODO: needed? checked: containsMouse
-    enabled: true
 
     // Set an auto updater
     Component.onCompleted: {
@@ -56,6 +52,9 @@ PlasmaExtras.ExpandableListItem  {
 
     MouseArea {
         id: groupItemBase
+        // Let the outer ListView handle touchpad scroll gestures instead of
+        // claiming them for the click-to-expand area.
+        scrollGestureEnabled: false
 
         // Hidden value so we can have a timestamp of the last update,
         // also used to update the GUI components when new values from hue arrive.
