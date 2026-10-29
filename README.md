@@ -1,16 +1,16 @@
 # Philips Hue light control plasmoid for KDE (Stand alone version)
 
 This plasmoid enables you to control [Philips Hue](http://www.meethue.com) light bulbs.
-The idea of the stand alone version is that it requires no compiled backend and thus can be 
+The idea of the stand alone version is that it requires no compiled backend and thus can be
 deployed as is, e.g. via Get Hot New Stuff.
 
-It allows you to 
+It allows you to
 
 * Control your lights
   * Turn lights on / off
   * Set the brightness
   * Set the colour or white temperature
-* Control your groups  
+* Control your groups
   * Turn whole groups on / off
   * Set the brightness
   * Set the colour or white temperature
@@ -22,11 +22,11 @@ It allows you to
   * Create new Groups and Rooms, modify and delete existing ones
   * Create new schedules, modify and delete existing ones
 * Set an alternative connection, including http basic auth
-  * Control your lights from outside your home network 
+  * Control your lights from outside your home network
 
-## License 
+## License
 
-This software is distributed under the LGPL 2.1 License. See COPYING for details. 
+This software is distributed under the LGPL 2.1 License. See COPYING for details.
 
 ## Requirements
 * **Starting with Version 4.\*, at least Plasma 5.21 is needed. Please use older versions for prior plasma releases.**
@@ -47,7 +47,7 @@ cd hoppla-sa
 ```
 mkdir build
 cd build
-cmake .. -DCMAKE_INSTALL_PREFIX=/usr 
+cmake .. -DCMAKE_INSTALL_PREFIX=/usr
 make
 sudo make install
 ```
@@ -59,17 +59,17 @@ sudo make install
 
 to install the plasmoid
 
-and 
+and
 
 `plasmapkg2 -r package`
 
 to remove it again.
 
-## Control lights from outside your network 
+## Control lights from outside your network
 
-You have to set up a public reachable proxy, I recommend apache httpd or nginx / lighttpd 
-over a secured (TLS) connection with basic auth. 
-A possible apache httpd configuration would be 
+You have to set up a public reachable proxy, I recommend apache httpd or nginx / lighttpd
+over a secured (TLS) connection with basic auth.
+A possible apache httpd configuration would be
 
 ```
 <IfModule mod_ssl.c>
@@ -102,5 +102,5 @@ A possible apache httpd configuration would be
 where mydyanmicdnsdomain.org is a domain pointing at your public address from your home network.
 Please read your httpd documentation on how to set it up, especially on how to add basic authentication.
 Note that due to the higher delay between requests and replies to the bridge, this can lead to the plasmoid
-being sometimes not up to date about the current state until the next background update occurs. 
+being sometimes not up to date about the current state until the next background update occurs.
 Updates can always be forced with the refresh button.

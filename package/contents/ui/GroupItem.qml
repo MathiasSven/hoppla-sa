@@ -1,17 +1,17 @@
 /*
  *    Copyright 2016-2024 Christian Loosli <develop@fuchsnet.ch>
- * 
+ *
  *    This library is free software; you can redistribute it and/or
  *    modify it under the terms of the GNU Lesser General Public
  *    License as published by the Free Software Foundation; either
  *    version 2.1 of the License, or (at your option) version 3, or any
  *    later version accepted by the original Author.
- * 
+ *
  *    This library is distributed in the hope that it will be useful,
  *    but WITHOUT ANY WARRANTY; without even the implied warranty of
  *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  *    Lesser General Public License for more details.
- * 
+ *
  *    You should have received a copy of the GNU Lesser General Public
  *    License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -28,7 +28,7 @@ import org.kde.kirigami as Kirigami
 
 PlasmaExtras.ExpandableListItem  {
     id: groupItem
-    
+
     property bool expanded : false
     property int baseHeight : groupItemBase.height + (Kirigami.Units.smallSpacing * 2) - groupBrightnessSlider.height
     property var currentGroupDetails : createCurrentGroupDetails()
@@ -37,26 +37,26 @@ PlasmaExtras.ExpandableListItem  {
     // As for now, groups are always available when given by the bridge
     property bool available : true
 
-    
+
     height: expanded ? baseHeight + groupTabBar.height + groupDetailsItem.height : baseHeight
     //TODO: needed? checked: containsMouse
     enabled: true
-    
+
     // Set an auto updater
     Component.onCompleted: {
         myTimer.stop();
-        // Check connection every 60 seconds 
-        // plus some extra time depending on the uuid, so not all 
+        // Check connection every 60 seconds
+        // plus some extra time depending on the uuid, so not all
         // groups are updated at the same time, thus putting a huge load on the bridge
         myTimer.interval = 60000 + ((vuuid % 10) * 500);
         myTimer.repeat = true;
         myTimer.triggered.connect(updateLoop);
         myTimer.start();
     }
-    
+
     MouseArea {
         id: groupItemBase
-        
+
         // Hidden value so we can have a timestamp of the last update,
         // also used to update the GUI components when new values from hue arrive.
         // Slightly hacky, but the best option as long as we don't want a proper data source.
@@ -66,20 +66,20 @@ PlasmaExtras.ExpandableListItem  {
             text: vLastUpdated
             onTextChanged : updateMe()
         }
-        
+
         anchors {
             left: parent.left
             right: parent.right
             top: parent.top
         }
-        
+
         height: Math.max(Kirigami.Units.iconSizes.medium, groupLabel.height + groupInfoLabel.height) + groupBrightnessSlider.height + Math.round(Kirigami.Units.gridUnit / 2)
-        
+
         HueColourItem {
             id: colourItem
-            width: Kirigami.Units.iconSizes.medium 
+            width: Kirigami.Units.iconSizes.medium
             height: Kirigami.Units.iconSizes.medium
-            
+
             valOn: vany_on
             colourMode: vcolormode
             valX: vx
@@ -90,22 +90,22 @@ PlasmaExtras.ExpandableListItem  {
             valBri: vbri
             valClass: vclass
             type: "group"
-            
+
             anchors {
                 left: parent.left
             }
         }
-        
+
         PlasmaComponents.Label {
             id: groupLabel
-            
+
             anchors {
                 bottom: colourItem.verticalCenter
                 left: colourItem.right
                 leftMargin: Math.round(Kirigami.Units.gridUnit / 2)
                 right: groupOnOffButton.visible ? groupOnOffButton.left : parent.right
             }
-            
+
             height: paintedHeight
             elide: Text.ElideRight
             font.weight: Font.Normal
@@ -113,17 +113,17 @@ PlasmaExtras.ExpandableListItem  {
             text: vname
             textFormat: Text.PlainText
         }
-        
+
         PlasmaComponents.Label {
             id: groupInfoLabel
-            
+
             anchors {
                 left: colourItem.right
                 leftMargin: Math.round(Kirigami.Units.gridUnit / 2)
                 right: groupOnOffButton.visible ? groupOnOffButton.left : parent.right
                 top: groupLabel.bottom
             }
-            
+
             height: paintedHeight
             elide: Text.ElideRight
             font.pointSize: Kirigami.Theme.smallFont.pointSize
@@ -131,25 +131,25 @@ PlasmaExtras.ExpandableListItem  {
             text: available ? getSubtext() : getSubtext() + " : " + i18n("not available")
             textFormat: Text.PlainText
         }
-        
-        
+
+
         PlasmaComponents.CheckBox {
             id: groupOnOffButton
-            
+
             anchors {
                 right: parent.right
                 rightMargin: Math.round(Kirigami.Units.gridUnit / 2)
                 verticalCenter: colourItem.verticalCenter
             }
-            
+
             checked: vany_on
             enabled: available
-            
+
             onClicked: toggleOnOff()
         }
-        
+
         RowLayout {
-            
+
             anchors {
                 left: colourItem.right
                 rightMargin: Math.round(Kirigami.Units.gridUnit)
@@ -157,7 +157,7 @@ PlasmaExtras.ExpandableListItem  {
                 top: groupInfoLabel.bottom
                 topMargin: Kirigami.Units.smallSpacing * 2
             }
-            
+
             Kirigami.Icon  {
                 id: "brightnessIcon"
                 Layout.maximumHeight: groupBrightnessSlider.height
@@ -177,11 +177,11 @@ PlasmaExtras.ExpandableListItem  {
                 visible: expanded
                 enabled: vany_on
                 value: vbrigthness
-                
+
                 // This is a hack that is needed due to how
                 // oddly Hue manages brightness for groups and children.
-                // A group update and resulting child update can lead 
-                // to an endless loop or at least odd behaviour when 
+                // A group update and resulting child update can lead
+                // to an endless loop or at least odd behaviour when
                 // we automatically call Hue once the value of the slider
                 // changes. Thus we ensure that we only call Hue
                 // if the change was made manually
@@ -206,16 +206,16 @@ PlasmaExtras.ExpandableListItem  {
                 }
             }
         }
-        
+
         onClicked: {
             expanded = !expanded;
         }
-        
+
         Component.onCompleted: {
             getMyGroupLights();
         }
     }
-    
+
     Item {
         id: groupDetailsItem
         visible: expanded
@@ -223,45 +223,45 @@ PlasmaExtras.ExpandableListItem  {
         // which is made up from a gridUnit * 6 rectangle and a smallSpacing * 4 vertical padding.
         // Whichever of the three is the tallest plus the tab bar is the needed height.
         height: Math.max(groupInfoItem.height, ((Kirigami.Units.gridUnit * 6) + (Kirigami.Units.smallSpacing * 4)), groupLightsView.contentHeight) + groupTabBar.height
-        
+
         anchors {
             top: groupItemBase.bottom
             left: parent.left
             right: parent.right
         }
-        
+
         PlasmaComponents.TabBar {
             id: groupTabBar
-            
+
             anchors {
                 top: parent.top
                 left: parent.left
                 right: parent.right
             }
-            
+
             PlasmaComponents.TabButton {
                 id: groupLightsTab
                 icon.source: "im-jabber"
             }
-            
+
             PlasmaComponents.TabButton {
                 id: groupWhitesTab
                 icon.source: "color-picker-white"
                 visible: vHasTemperature
             }
-            
+
             PlasmaComponents.TabButton {
                 id: groupColoursTab
                 icon.source: "color-management"
                 visible: vHasColour
             }
-            
+
             PlasmaComponents.TabButton {
                 id: groupInfoTab
                 icon.source: "help-about"
             }
         }
-        
+
         ListView {
             id: groupLightsView
             anchors {
@@ -271,7 +271,7 @@ PlasmaExtras.ExpandableListItem  {
                 leftMargin: Kirigami.Units.gridUnit * 2
                 right: parent.right
             }
-            
+
             interactive: false
             height: expanded ? groupLightsView.contentHeight : 0
             visible: height > 0 && groupTabBar.currentIndex == 0
@@ -279,12 +279,12 @@ PlasmaExtras.ExpandableListItem  {
             model: groupLightModel
             delegate: LightItem { }
         }
-        
+
         Item {
             id: groupWhitesItem
             visible: groupTabBar.currentIndex == 1
             width: parent.width
-            
+
             anchors {
                 top: groupTabBar.bottom
                 topMargin: Kirigami.Units.smallSpacing * 4
@@ -293,10 +293,10 @@ PlasmaExtras.ExpandableListItem  {
                 right: parent.right
                 rightMargin: Kirigami.Units.gridUnit * 2
             }
-            
+
             TemperatureChooser {
                 id: tempChooser
-                
+
                 onReleased: {
                     if(available && vany_on) {
                         // Minimal ct is 153 mired, maximal is 500. Thus we have a range of 347.
@@ -307,15 +307,15 @@ PlasmaExtras.ExpandableListItem  {
                     }
                 }
             }
-            
+
         }
-        
+
         Item {
             id: groupColourItem
             //TODO: All of me
             visible: groupTabBar.currentIndex == 2
             width: parent.width
-            
+
             anchors {
                 top: groupTabBar.bottom
                 topMargin: Kirigami.Units.smallSpacing * 4
@@ -324,12 +324,12 @@ PlasmaExtras.ExpandableListItem  {
                 right: parent.right
                 rightMargin: Kirigami.Units.gridUnit * 2
             }
-            
+
             ColourChooser {
                 id: colorChooser
                 width: parent.width
                 height: Kirigami.Units.gridUnit * 6
-                
+
                 onReleased: {
                     if(available && vany_on) {
                         // Minimal ct is 153 mired, maximal is 500. Thus we have a range of 347.
@@ -342,12 +342,12 @@ PlasmaExtras.ExpandableListItem  {
                 }
             }
         }
-        
+
         //         Item {
         //             id: groupScenesItem
         //             visible: groupTabBar.currentTab == groupSceneTab
         //             width: parent.width
-        //             
+        //
         //             anchors {
         //                 top: groupTabBar.bottom
         //                 topMargin: Kirigami.Units.smallSpacing / 2
@@ -355,7 +355,7 @@ PlasmaExtras.ExpandableListItem  {
         //                 leftMargin: Kirigami.Units.gridUnit * 2
         //                 right: parent.right
         //             }
-        //             
+        //
         //             PlasmaComponents.Label {
         //                 id: groupScenesLabel
         //                 height: paintedHeight
@@ -365,12 +365,12 @@ PlasmaExtras.ExpandableListItem  {
         //                 textFormat: Text.PlainText
         //             }
         //         }
-        
+
         Item {
             id: groupInfoItem
             visible: groupTabBar.currentIndex == 3
             width: parent.width
-            
+
             anchors {
                 top: groupTabBar.bottom
                 topMargin: Kirigami.Units.smallSpacing / 2
@@ -378,17 +378,17 @@ PlasmaExtras.ExpandableListItem  {
                 leftMargin: Kirigami.Units.gridUnit * 2
                 right: parent.right
             }
-            
+
             GridLayout {
                 width: parent.width
                 columns: 2
                 rowSpacing: Kirigami.Units.smallSpacing / 4
-                
+
                 Repeater {
                     id: groupInfoRepeater
-                    
+
                     model: currentGroupDetails.length
-                    
+
                     PlasmaComponents.Label {
                         id: detailLabel
                         Layout.fillWidth: true
@@ -403,7 +403,7 @@ PlasmaExtras.ExpandableListItem  {
             }
         }
     }
-    
+
     /**
      * Helper to get the subtext, based on the amount of lights in the group
      */
@@ -416,9 +416,9 @@ PlasmaExtras.ExpandableListItem  {
             return amount + " " + i18n("lights");
         }
     }
-    
+
     /**
-     * Helper to switch the on/off state, will updateSelf() 
+     * Helper to switch the on/off state, will updateSelf()
      * and updateChildren() once done to ensure the own values are correct
      * and the state is propagated to children
      */
@@ -427,7 +427,7 @@ PlasmaExtras.ExpandableListItem  {
         updateSelf();
         updateChildren();
     }
-    
+
     /**
      * Helper to be called when the timestamp updated, which means
      * we should update our GUI and all children, but not our
@@ -440,9 +440,9 @@ PlasmaExtras.ExpandableListItem  {
             var child = myGroupLights.get(i);
             updateLight(child, 200);
         }
-        
+
     }
-    
+
     /**
      * Helper to get our own values from hue and update ourselves
      */
@@ -455,7 +455,7 @@ PlasmaExtras.ExpandableListItem  {
             }
         }
     }
-    
+
     /**
      * Helper to update our GUI controls once we get new values
      */
@@ -463,7 +463,7 @@ PlasmaExtras.ExpandableListItem  {
         groupOnOffButton.checked = vany_on;
         groupOnOffButton.enabled = available;
         groupBrightnessSlider.enabled =  vany_on;
-        
+
         if(vany_on) {
             if(vcolormode == "ct") {
                 colourItem.setColourCT(vct);
@@ -475,27 +475,27 @@ PlasmaExtras.ExpandableListItem  {
         else {
             colourItem.setColourOff();
         }
-        
+
         currentGroupDetails = createCurrentGroupDetails()
     }
-    
+
     /**
      * Helper to get lights belonging to us
      */
     function getMyGroupLights() {
         getGroupLights(groupLightModel, slights);
     }
-    
+
     /**
      * Helper to fill in an array of group details
      * to be shown in the details tab
      */
     function createCurrentGroupDetails() {
         var groupDtls = [];
-        
+
         groupDtls.push(i18n("ID and name"));
         groupDtls.push(vuuid + ": " + vname);
-        
+
         groupDtls.push(i18n("Number of lights"));
         groupDtls.push(vlights.count);
         groupDtls.push(i18n("State"));
@@ -506,14 +506,14 @@ PlasmaExtras.ExpandableListItem  {
         else if (vany_on) {
             mystate = i18n("Some lights on");
         }
-        
+
         groupDtls.push(mystate);
-        
-        
+
+
         groupDtls.push(i18n("Brightness"));
         groupDtls.push(vbri);
         groupBrightnessSlider.value = vbri
-        
+
         var myColor = "";
         if(vcolormode === 'xy') {
             myColor = i18n("Colour in CIE space, x: ") + vx + i18n(" y: ") + vy;
@@ -524,27 +524,27 @@ PlasmaExtras.ExpandableListItem  {
         else if(vcolormode === 'ct') {
             myColor = i18n("White by temperature: ") + vct;
         }
-        
+
         groupDtls.push(i18n("Colour mode"));
         groupDtls.push(myColor);
-        
+
         groupDtls.push(i18n("Type"));
         groupDtls.push(ttype)
-        
+
         groupDtls.push(i18n("Class"));
         groupDtls.push(tclass);
-        
+
         return groupDtls;
     }
-    
+
     /**
-     * Helpder to update all children belonging to us, 
+     * Helpder to update all children belonging to us,
      * both in our own list and the general one
      */
     function updateChildren() {
         var children = []
         var myGroupLights = groupLightModel;
-        // First update our own list of children, 
+        // First update our own list of children,
         // adding all their ids to the children array
         for(var i = 0; i < myGroupLights.count; ++i) {
             var child = myGroupLights.get(i);
@@ -562,7 +562,7 @@ PlasmaExtras.ExpandableListItem  {
             }
         }
     }
-    
+
     function updateLoop() {
         if(plasmoid.expanded)
         {
@@ -572,13 +572,13 @@ PlasmaExtras.ExpandableListItem  {
         updateSelf();
         updateChildren();
     }
-    
+
     ListModel {
         id: groupLightModel
     }
-    
+
     Timer {
         id: myTimer
     }
-    
+
 }

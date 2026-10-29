@@ -1,4 +1,4 @@
-# Changelog 
+# Changelog
 
 ## 4.0.0 (2021-06-08)
 
@@ -22,9 +22,9 @@ Adds support for some things added in 1.30 HUE API, namely:
 
 ## 2.6.2 (2018-3-1)
 
-* Fix a bug caused by a hue update, so it no longer immediately returns up to date info about a group or light. 
+* Fix a bug caused by a hue update, so it no longer immediately returns up to date info about a group or light.
 
-## 2.6.0 (2017-02-08) 
+## 2.6.0 (2017-02-08)
 
 * Add coloured icons for all types
 * Change the editAction GUI to make icon and colour easier to pick
@@ -35,7 +35,7 @@ Adds support for some things added in 1.30 HUE API, namely:
 * Add some placeholder texts in bridge config
 * Add http as a default protocol when none is given
 
-## 2.4.2 (2017-01-30) 
+## 2.4.2 (2017-01-30)
 
 * Existing action commands can now be edited
 * Fix a bug that prevented weekly schedules to be filled correctly
@@ -47,13 +47,13 @@ Adds support for some things added in 1.30 HUE API, namely:
 
 * ActionEditor now can load existing actions, thus you can modify existing schedule commands
 * Added Swiss German as translation
-* Bug fixes 
+* Bug fixes
 * Translation updates
 
 ## 2.0.2 (2017-01-22)
 
 * Fix potential bug when opening the config before the plasmoid
-* Update translations 
+* Update translations
 
 ## 2.0.0 (2017-01-20)
 
@@ -64,7 +64,7 @@ Adds support for some things added in 1.30 HUE API, namely:
 * Bug fixes all over the place
 * 100% translated to German
 
-## 1.0.0 (2017-01-14) 
+## 1.0.0 (2017-01-14)
 
 * Actions
   * Show two default actions, turn on and off all lamps
@@ -76,7 +76,7 @@ Adds support for some things added in 1.30 HUE API, namely:
   * Adjustable brightness
   * Adjustable colour
   * Adjustable white temperature
-  * Show detailled light info 
+  * Show detailled light info
 
 * Groups
   * Show all groups with curent status, coloured, with room type icon
@@ -85,8 +85,8 @@ Adds support for some things added in 1.30 HUE API, namely:
   * Adjustable brightness
   * Adjustable colour
   * Adjustable white temperature
-  * Show detailled group info 
-  
+  * Show detailled group info
+
 * Bridge
   * Configurable bridge address, auto-discoverable via Philips Server
   * Authentication with bridge from config dialogue

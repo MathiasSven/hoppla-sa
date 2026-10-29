@@ -1,17 +1,17 @@
 /*
  *    Copyright 2016-2024 Christian Loosli <develop@fuchsnet.ch>
- * 
+ *
  *    This library is free software; you can redistribute it and/or
  *    modify it under the terms of the GNU Lesser General Public
  *    License as published by the Free Software Foundation; either
  *    version 2.1 of the License, or (at your option) version 3, or any
  *    later version accepted by the original Author.
- * 
+ *
  *    This library is distributed in the hope that it will be useful,
  *    but WITHOUT ANY WARRANTY; without even the implied warranty of
  *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  *    Lesser General Public License for more details.
- * 
+ *
  *    You should have received a copy of the GNU Lesser General Public
  *    License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -28,156 +28,156 @@ import org.kde.plasma.extras as PlasmaExtras
 import org.kde.plasma.plasmoid
 
 PlasmaExtras.Representation {
-        id: fullRep
+    id: fullRep
 
-        implicitHeight: header.implicitHeight + contentView.implicitHeight
+    implicitHeight: header.implicitHeight + contentView.implicitHeight
 
-        KeyNavigation.down: tabBar.currentItem
-
-
-        header: PlasmaExtras.PlasmoidHeading {
-            // Make this toolbar's buttons align vertically with the ones above
-            rightPadding: -1
-            // Allow tabbar to touch the header's bottom border
-            bottomPadding: -bottomInset
-
-            RowLayout {
-                anchors.fill: parent
-                spacing: Kirigami.Units.smallSpacing
-
-                PC3.TabBar {
-                    id: tabBar
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
+    KeyNavigation.down: tabBar.currentItem
 
 
-                    // KeyNavigation.down: contentView.currentItem.contentItem.upperListView.itemAtIndex(0)
+    header: PlasmaExtras.PlasmoidHeading {
+        // Make this toolbar's buttons align vertically with the ones above
+        rightPadding: -1
+        // Allow tabbar to touch the header's bottom border
+        bottomPadding: -bottomInset
 
-                    PC3.TabButton {
-                        id: actionsTab
-                        text: i18n("Actions")
+        RowLayout {
+            anchors.fill: parent
+            spacing: Kirigami.Units.smallSpacing
 
-                        KeyNavigation.up: fullRep.KeyNavigation.up
-                    }
+            PC3.TabBar {
+                id: tabBar
+                Layout.fillWidth: true
+                Layout.fillHeight: true
 
-                    PC3.TabButton {
-                        id: groupsTab
-                        text: i18n("Groups")
 
-                        KeyNavigation.up: fullRep.KeyNavigation.up
-                    }
+                // KeyNavigation.down: contentView.currentItem.contentItem.upperListView.itemAtIndex(0)
 
-                    PC3.TabButton {
-                        id: lightsTab
-                        text: i18n("Lights")
+                PC3.TabButton {
+                    id: actionsTab
+                    text: i18n("Actions")
 
-                        KeyNavigation.up: fullRep.KeyNavigation.up
-                    }
+                    KeyNavigation.up: fullRep.KeyNavigation.up
                 }
 
+                PC3.TabButton {
+                    id: groupsTab
+                    text: i18n("Groups")
 
-                PC3.ToolButton {
-                    visible: !(plasmoid.containmentDisplayHints & PlasmaCore.Types.ContainmentDrawsPlasmoidHeading)
+                    KeyNavigation.up: fullRep.KeyNavigation.up
+                }
 
-                    icon.name: "configure"
-                    onClicked: plasmoid.internalAction("configure").trigger()
+                PC3.TabButton {
+                    id: lightsTab
+                    text: i18n("Lights")
 
-                    Accessible.name: plasmoid.internalAction("configure").text
-                    PC3.ToolTip {
-                        text: plasmoid.internalAction("configure").text
-                    }
+                    KeyNavigation.up: fullRep.KeyNavigation.up
                 }
             }
-        }
-
-        contentItem: StackView {
-            id: contentView
-            property var hiddenTypes: []
-            initialItem: actionsView
-
-            TwoPartView {
-                id: actionsView
-                listModel: actionModel
-                listDelegate: ActionItem { }
-                iconName: "edit-none"
-                placeholderText: i18n("no actions")
-            }
-
-            TwoPartView {
-                id: groupsView
-                listModel: groupModel
-                listDelegate: GroupItem { }
-                iconName: "edit-none"
-                placeholderText: i18n("no groups")
-            }
-
-            TwoPartView {
-                id: lightsView
-                listModel: lightModel
-                listDelegate: LightItem { }
-                iconName: "edit-none"
-                placeholderText: i18n("no lights")
-            }
 
 
-            Connections {
-                target: tabBar
-                function onCurrentIndexChanged() {
-                    if (tabBar.currentItem === actionsTab) {
-                        contentView.replace(actionsView)
-                    } else if (tabBar.currentItem === groupsTab) {
-                        contentView.replace(groupsView)
-                    } else if (tabBar.currentItem === lightsTab) {
-                        contentView.replace(lightsView)
-                    }
+            PC3.ToolButton {
+                visible: !(plasmoid.containmentDisplayHints & PlasmaCore.Types.ContainmentDrawsPlasmoidHeading)
+
+                icon.name: "configure"
+                onClicked: plasmoid.internalAction("configure").trigger()
+
+                Accessible.name: plasmoid.internalAction("configure").text
+                PC3.ToolTip {
+                    text: plasmoid.internalAction("configure").text
                 }
             }
         }
+    }
 
-        component TwoPartView : PC3.ScrollView {
-            id: scrollView
-            property string iconName: ""
-            property string placeholderText: ""
-            required property ListModel listModel
-            required property Component listDelegate
+    contentItem: StackView {
+        id: contentView
+        property var hiddenTypes: []
+        initialItem: actionsView
 
-            implicitHeight: Math.min(content.contentHeight + topPadding + bottomPadding,
-                                     Kirigami.Units.gridUnit * 40)
+        TwoPartView {
+            id: actionsView
+            listModel: actionModel
+            listDelegate: ActionItem { }
+            iconName: "edit-none"
+            placeholderText: i18n("no actions")
+        }
 
-            Loader {
-                parent: scrollView
-                anchors.centerIn: parent
-                width: parent.width -  Kirigami.Units.gridUnit * 4
-                active: visible
-                visible: scrollView.listModel.count < 1
-                sourceComponent: PlasmaExtras.PlaceholderMessage {
-                    iconName: scrollView.iconName
-                    text: scrollView.placeholderText
-                }
-            }
-            contentItem: ListView {
-                id: content
-                model: scrollView.listModel
-                delegate: scrollView.listDelegate
-                clip: true
-                boundsBehavior: Flickable.StopAtBounds
+        TwoPartView {
+            id: groupsView
+            listModel: groupModel
+            listDelegate: GroupItem { }
+            iconName: "edit-none"
+            placeholderText: i18n("no groups")
+        }
 
-                Keys.onDownPressed: event => {
-                    if (currentIndex < count - 1) {
-                        incrementCurrentIndex();
-                        currentItem.forceActiveFocus();
-                    }
-                    event.accepted = true;
-                }
-                Keys.onUpPressed: event => {
-                    if (currentIndex > 0) {
-                        decrementCurrentIndex();
-                        currentItem.forceActiveFocus();
-                    }
-                    event.accepted = true;
+        TwoPartView {
+            id: lightsView
+            listModel: lightModel
+            listDelegate: LightItem { }
+            iconName: "edit-none"
+            placeholderText: i18n("no lights")
+        }
+
+
+        Connections {
+            target: tabBar
+            function onCurrentIndexChanged() {
+                if (tabBar.currentItem === actionsTab) {
+                    contentView.replace(actionsView)
+                } else if (tabBar.currentItem === groupsTab) {
+                    contentView.replace(groupsView)
+                } else if (tabBar.currentItem === lightsTab) {
+                    contentView.replace(lightsView)
                 }
             }
         }
+    }
+
+    component TwoPartView : PC3.ScrollView {
+        id: scrollView
+        property string iconName: ""
+        property string placeholderText: ""
+        required property ListModel listModel
+        required property Component listDelegate
+
+        implicitHeight: Math.min(content.contentHeight + topPadding + bottomPadding,
+        Kirigami.Units.gridUnit * 40)
+
+        Loader {
+            parent: scrollView
+            anchors.centerIn: parent
+            width: parent.width -  Kirigami.Units.gridUnit * 4
+            active: visible
+            visible: scrollView.listModel.count < 1
+            sourceComponent: PlasmaExtras.PlaceholderMessage {
+                iconName: scrollView.iconName
+                text: scrollView.placeholderText
+            }
+        }
+        contentItem: ListView {
+            id: content
+            model: scrollView.listModel
+            delegate: scrollView.listDelegate
+            clip: true
+            boundsBehavior: Flickable.StopAtBounds
+
+            Keys.onDownPressed: event => {
+                if (currentIndex < count - 1) {
+                    incrementCurrentIndex();
+                    currentItem.forceActiveFocus();
+                }
+                event.accepted = true;
+            }
+            Keys.onUpPressed: event => {
+                if (currentIndex > 0) {
+                    decrementCurrentIndex();
+                    currentItem.forceActiveFocus();
+                }
+                event.accepted = true;
+            }
+        }
+    }
 
     Component.onCompleted: {
         getHueConfigured();
@@ -193,29 +193,29 @@ PlasmaExtras.Representation {
             initHueConfig();
             checkHueConnection(updatedConnection, true);
         }
-        
+
         onPollChanged: {
             resetTimer();
         }
-        
+
         onPollTimeChanged: {
             resetTimer();
         }
-        
+
         onAuthTokenChanged: {
             initHueConfig();
             checkHueConnection(updatedConnection, true);
         }
-        
+
         onActionlistChanged: {
             addActions();
         }
     }
-   
-    // Method to re-init the plasmoid. 
+
+    // Method to re-init the plasmoid.
     // This is used on refresh because it puts way less load on the Hue bridge
     // as it fetches all lights and groups together, instead of updating each.
-    // This leads to side effects such as closing the current expanded selection, 
+    // This leads to side effects such as closing the current expanded selection,
     // but this should be acceptable, else updateGroups and updateLights can be used.
     function reInit(initial, fetchAll) {
         // hueNotConfiguredView.visible = !getHueConfigured();
@@ -230,7 +230,7 @@ PlasmaExtras.Representation {
             addActions();
         }
     }
-    
+
     // Method to restart the poll timer with configured values
     function resetTimer() {
         fullTimer.stop();
@@ -242,13 +242,13 @@ PlasmaExtras.Representation {
             fullTimer.start();
         }
     }
-    
+
     function fetchAllDone() {
         //TODO: busyOverlay.opacity = 0;
         // Done to initially set the tooltip
         checkHueConnection(updatedConnection, true);
     }
-    
+
     /**
      * Helper function executed periodically.
      * Checks the connection and, if the plasmoid is not expanded
@@ -259,7 +259,7 @@ PlasmaExtras.Representation {
         // Check connection state
         checkHueConnection(updatedConnection, false);
     }
-    
+
     /**
      * Helper to check the updated connection
      * @param {String} connection the connection state
@@ -302,7 +302,7 @@ PlasmaExtras.Representation {
             plasmoid.status = PlasmaCore.Types.ActiveStatus;
         }
     }
-    
+
     /**
      * Helper to set a tooltip with baseText: n/m lights on
      * @param {String} baseText base text to use
@@ -312,23 +312,23 @@ PlasmaExtras.Representation {
 
         var lightsTotal = myLights.count;
         var lightOn = 0;
-  
+
         for(var i = 0; i < myLights.count; ++i) {
             if(myLights.get(i).von) {
                 lightOn++;
             }
         }
-        
+
         var tooltip = baseText + ": " + lightOn + "/" + lightsTotal + " " + i18n("lights on")
         main.toolTipSubText = tooltip;
     }
-    
+
     /**
      * Helper to add initial actions, later on also configured ones
      */
     function addActions() {
         actionModel.clear();
-        
+
         try {
             var actionItems = JSON.parse(plasmoid.configuration.actionlist);
         }
@@ -336,7 +336,7 @@ PlasmaExtras.Representation {
             debugPrint("Failed to parse actionlist json: " + actionItems);
             return;
         }
-        
+
         for(var uuid in actionItems) {
             var cItem = actionItems[uuid];
             var actionItem = {};
@@ -346,24 +346,24 @@ PlasmaExtras.Representation {
             actionItem.subtitle = cItem.userAdded ? cItem.subtitle : i18n(cItem.subtitle);
             actionItem.icon = cItem.icon;
             actionItem.actions = cItem.actions;
-            
+
             actionModel.append(actionItem);
         }
     }
-    
-    
+
+
     ListModel {
         id: actionModel
     }
-    
+
     ListModel {
         id: groupModel
     }
-    
+
     ListModel {
         id: lightModel
-    }  
-    
+    }
+
     Timer {
         id: fullTimer
     }

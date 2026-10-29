@@ -45,4 +45,4 @@ cd ${WDIR}
 rm rcfiles.list
 rm infiles.list
 rm rc.cpp
-echo "Done" 
+echo "Done"

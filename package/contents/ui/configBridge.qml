@@ -1,17 +1,17 @@
 /*
  *    Copyright 2016-2024 Christian Loosli <develop@fuchsnet.ch>
- * 
+ *
  *    This library is free software; you can redistribute it and/or
  *    modify it under the terms of the GNU Lesser General Public
  *    License as published by the Free Software Foundation; either
  *    version 2.1 of the License, or (at your option) version 3, or any
  *    later version accepted by the original Author.
- * 
+ *
  *    This library is distributed in the hope that it will be useful,
  *    but WITHOUT ANY WARRANTY; without even the implied warranty of
  *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  *    Lesser General Public License for more details.
- * 
+ *
  *    You should have received a copy of the GNU Lesser General Public
  *    License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -31,7 +31,7 @@ KCM.SimpleKCM {
     KCoreAddons.KUser {
         id: kuser
     }
-    
+
     property alias cfg_baseURL: baseURL.text
     property alias cfg_authToken: authToken.text
     property alias cfg_useAltURL: altConnectionCb.checked
@@ -44,17 +44,17 @@ KCM.SimpleKCM {
     property string infoColour: "#5555ff"
     property string errorColour: "#ff0000"
     property string successColour: "#00aa00"
-    
+
     Item {
         width: parent.width
         anchors.left: parent.left
         anchors.right: parent.right
-        
+
         ColumnLayout {
             Layout.fillWidth: true
             anchors.left: parent.left
             anchors.right: parent.right
-            
+
             GroupBox {
                 id: grpStatus
                 Layout.fillWidth: true
@@ -62,7 +62,7 @@ KCM.SimpleKCM {
                 anchors.right: parent.right
                 // flat: true
                 visible: false
-                
+
                 Rectangle {
                     id: rctStatus
                     width: parent.width
@@ -72,7 +72,7 @@ KCM.SimpleKCM {
                     border.width: 1
                     radius: 5
                 }
-                
+
                 Label {
                     anchors {
                         horizontalCenter: parent.horizontalCenter
@@ -96,82 +96,82 @@ KCM.SimpleKCM {
                     font.bold: true
                 }
             }
-            
-            
+
+
             GroupBox {
                 id: grpMain
                 Layout.fillWidth: true
                 anchors.left: parent.left
                 anchors.right: parent.right
                 // flat: true
-                
+
                 GridLayout {
                     id: grdMain
                     anchors.left: parent.left
                     anchors.right: parent.right
                     columns: 3
                     Layout.fillWidth: true
-                    
+
                     Label {
                         Layout.alignment: Qt.AlignRight
                         text: i18n("Bridge Address:")
                     }
-                    
+
                     Button {
                         id: btnFindBridge
                         enabled: true
                         text: i18n("Find bridge")
                         onClicked: findBridge()
                     }
-                    
+
                     TextField {
                         id: baseURL
                         Layout.fillWidth: true
                         placeholderText: i18n("http://1.2.3.4 or use \"Find bridge\"")
                     }
-                    
+
                     Label {
                         Layout.alignment: Qt.AlignRight
                         text: i18n("Authentication Name:")
                     }
-                    
+
                     Button {
                         id: btnAuthenticate
                         text: i18n("Authenticate")
                         onClicked: authenticate()
                     }
-                    
+
                     TextField {
                         id: authToken
                         Layout.fillWidth: true
                         placeholderText: i18n("Use the \"Authenticate\" button")
                     }
-                    
+
                     CheckBox {
                         id: pollCb
                         text: i18n("Check for status every")
                         Layout.alignment: Qt.AlignLeft
                     }
-                    
+
                     SpinBox {
                         id: sbPollTime
                         to: 30758400
                         from: 1
                         enabled: pollCb.checked
                     }
-                    
+
                     Label {
                         Layout.alignment: Qt.AlignLeft
                         text: i18n("seconds")
                     }
                 }
             }
-            
+
             CheckBox {
                 id: altConnectionCb
                 text: i18n("Use a fallback connection when the bridge is out of reach")
             }
-            
+
             GroupBox {
                 Layout.fillWidth: true
                 anchors.left: parent.left
@@ -184,46 +184,46 @@ KCM.SimpleKCM {
                     columns: 2
                     Layout.fillWidth: true
                     anchors.fill: parent
-                    
+
                     Label {
                         Layout.alignment: Qt.AlignRight
                         text: i18n("Alternative bridge URL:")
                     }
-                    
+
                     TextField {
                         id: altUrl
                         Layout.fillWidth: true
                         placeholderText: i18n("https://hue.mypersonaldyndns.org")
                     }
-                    
+
                     Label {
                         Layout.alignment: Qt.AlignRight
                         text: i18n("Requires basic authentication:")
                     }
-                    
+
                     CheckBox {
                         id: altRequireAuth
                         Layout.alignment: Qt.AlignLeft
                     }
-                    
+
                     Label {
                         visible: altRequireAuth.checked
                         Layout.alignment: Qt.AlignRight
                         text: i18n("Username:")
                     }
-                    
+
                     TextField {
                         id: username
                         visible: altRequireAuth.checked
                         Layout.fillWidth: true
                     }
-                    
+
                     Label {
                         visible: altRequireAuth.checked
                         Layout.alignment: Qt.AlignRight
                         text: i18n("Password:")
                     }
-                    
+
                     TextField {
                         id: password
                         visible: altRequireAuth.checked
@@ -234,7 +234,7 @@ KCM.SimpleKCM {
             }
         }
     }
-    
+
     function findBridge() {
         btnFindBridge.enabled = false;
         lblStatusTitle.text = i18n("Trying to find your bridge ...");
@@ -243,7 +243,7 @@ KCM.SimpleKCM {
         grpStatus.visible = true;
         Hue.getHueIp(findHueCallback);
     }
-    
+
     function findHueCallback(success, ip) {
         if(success) {
             lblStatusTitle.text = i18n("Found your bridge");
@@ -259,7 +259,7 @@ KCM.SimpleKCM {
         }
         btnFindBridge.enabled = true;
     }
-    
+
     function authenticate() {
         btnAuthenticate.enabled = false;
         lblStatusTitle.text = i18n("Trying to authenticate with your bridge ...");
@@ -268,11 +268,11 @@ KCM.SimpleKCM {
         grpStatus.visible = true;
         var hostname = kuser.host;
         // This is debatable UX wise, we fetch the bridge URL from the text field instead of the config
-        // so when a user just entered it but didn't save yet it works regardless. 
+        // so when a user just entered it but didn't save yet it works regardless.
         // From a usibility standpoint, this is better as it is what the user expects.
         Hue.authenticateWithBridge(baseURL.text, hostname, authenticateSuccess, authenticateFail);
     }
-    
+
     function authenticateSuccess(token) {
          btnAuthenticate.enabled = true;
         lblStatusTitle.text = i18n("Authenticated with your bridge");
@@ -281,7 +281,7 @@ KCM.SimpleKCM {
         grpStatus.visible = true;
         authToken.text = token;
     }
-    
+
     function authenticateFail(message) {
         btnAuthenticate.enabled = true;
         lblStatusTitle.text = i18n("Failed to authenticate with your bridge");

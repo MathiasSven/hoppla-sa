@@ -1,17 +1,17 @@
 /*
  *    Copyright 2016-2024 Christian Loosli <develop@fuchsnet.ch>
- * 
+ *
  *    This library is free software; you can redistribute it and/or
  *    modify it under the terms of the GNU Lesser General Public
  *    License as published by the Free Software Foundation; either
  *    version 2.1 of the License, or (at your option) version 3, or any
  *    later version accepted by the original Author.
- * 
+ *
  *    This library is distributed in the hope that it will be useful,
  *    but WITHOUT ANY WARRANTY; without even the implied warranty of
  *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  *    Lesser General Public License for more details.
- * 
+ *
  *    You should have received a copy of the GNU Lesser General Public
  *    License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -32,22 +32,22 @@ PlasmaComponents.ItemDelegate {
 
     property int baseHeight : 40
     property string defaultIcon : "help-about"
-    
+
     height:  Math.max(Kirigami.Units.iconSizes.medium, actionLabel.height + actionInfoLabel.height) + Math.round(Kirigami.Units.gridUnit / 2)
     enabled: true
     hoverEnabled: true
-    
+
     Item {
         id: actionItemBase
-        
-        
+
+
         anchors {
             left: parent.left
             right: parent.right
             top: parent.top
             topMargin: -Math.round(Kirigami.Units.gridUnit / 3)
         }
-        
+
         height: Math.max(Kirigami.Units.iconSizes.medium, actionLabel.height + actionInfoLabel.height) + Math.round(Kirigami.Units.gridUnit / 2)
 
         KSvg.Svg {
@@ -120,14 +120,14 @@ PlasmaComponents.ItemDelegate {
 
             onClicked: execute()
         }
-        
+
         Component.onCompleted: {
              mySvg.imagePath = Qt.resolvedUrl("../images/" + icon);
         }
     }
-    
+
     function execute() {
-        
+
         var myActions = actions
         for (var i = 0; i < myActions.count; i++) {
             var act = myActions.get(i);
@@ -141,10 +141,10 @@ PlasmaComponents.ItemDelegate {
             Hue.putPayloadToUrl(url, act.payload, successCallback, failureCallback)
         }
     }
-    
+
     function successCallback(json, doneCallback) {
         debugPrint("Success callback with json: " + json);
-        
+
         try {
             var myResult = JSON.parse(json);
         }
@@ -166,12 +166,12 @@ PlasmaComponents.ItemDelegate {
         reInit(false, true);
         doneCallback();
     }
-    
+
     function failureCallback(request, doneCallback) {
         debugPrint("Failure callback with code: " + request.status + " and json: " + json);
         doneCallback();
     }
-    
+
     function getIcon() {
         if(icon) {
             return icon;

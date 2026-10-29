@@ -1,17 +1,17 @@
 /*
  *    Copyright 2016-2024 Christian Loosli <develop@fuchsnet.ch>
- * 
+ *
  *    This library is free software; you can redistribute it and/or
  *    modify it under the terms of the GNU Lesser General Public
  *    License as published by the Free Software Foundation; either
  *    version 2.1 of the License, or (at your option) version 3, or any
  *    later version accepted by the original Author.
- * 
+ *
  *    This library is distributed in the hope that it will be useful,
  *    but WITHOUT ANY WARRANTY; without even the implied warranty of
  *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  *    Lesser General Public License for more details.
- * 
+ *
  *    You should have received a copy of the GNU Lesser General Public
  *    License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -26,30 +26,30 @@ import "../code/hue.js" as Hue
 
 
 Item {
-    
+
     width: parent.width
     anchors.left: parent.left
     anchors.right: parent.right
-    
+
     property string infoColour: "#5555ff"
     property string errorColour: "#ff0000"
     property string successColour: "#00aa00"
     property int attempts: 60
     property string idToDelete: "-1"
-    
+
     ListModel {
         id: lightsModel
     }
-    
+
     ListModel {
         id: newLightsModel
     }
-    
+
     ColumnLayout {
         Layout.fillWidth: true
         anchors.left: parent.left
         anchors.right: parent.right
-        
+
         GroupBox {
             id: grpStatus
             Layout.fillWidth: true
@@ -57,7 +57,7 @@ Item {
             anchors.right: parent.right
             flat: true
             visible: false
-            
+
             Rectangle {
                 id: rctStatus
                 width: parent.width
@@ -67,7 +67,7 @@ Item {
                 border.width: 1
                 radius: 5
             }
-            
+
             Label {
                 anchors {
                     horizontalCenter: parent.horizontalCenter
@@ -89,46 +89,46 @@ Item {
                 font.bold: true
             }
         }
-        
+
         TableView {
             id: lightsTable
             width: parent.width
-            
+
             TableViewColumn {
                 id: idCol
                 role: 'uuid'
                 title: i18n('ID')
                 width: parent.width * 0.08
-                
+
                 delegate: Label {
                     text: styleData.value
                     elide: Text.ElideRight
                 }
             }
-            
+
             TableViewColumn {
                 id: nameCol
                 role: 'name'
                 title: i18n('Name')
                 width: parent.width * 0.49
-                
+
                 delegate: Label {
                     text: styleData.value
                     elide: Text.ElideRight
                 }
             }
-            
+
             TableViewColumn {
                 title: i18n('Action')
                 width: parent.width * 0.38
-                
+
                 delegate: Item {
-                    
+
                     GridLayout {
                         height: parent.height
                         columns: 5
                         rowSpacing: 0
-                        
+
                         Button {
                             iconName: 'im-jabber'
                             tooltip: i18n("Switch on")
@@ -138,7 +138,7 @@ Item {
                                 Hue.switchLight(editItem.uuid, true)
                             }
                         }
-                        
+
                         Button {
                             iconName: 'system-shutdown'
                             tooltip: i18n("Switch off")
@@ -148,7 +148,7 @@ Item {
                                 Hue.switchLight(editItem.uuid, false)
                             }
                         }
-                        
+
                         Button {
                             iconName: 'contrast'
                             tooltip: i18n("Blink")
@@ -158,7 +158,7 @@ Item {
                                 Hue.blinkLight(editItem.uuid, "select");
                             }
                         }
-                        
+
                         Button {
                             iconName: 'entry-edit'
                             tooltip: i18n("Edit")
@@ -171,8 +171,8 @@ Item {
                                 editLightDialogue.open();
                             }
                         }
-                        
-                        
+
+
                         Button {
                             iconName: 'list-remove'
                             tooltip: i18n("Remove")
@@ -191,7 +191,7 @@ Item {
             Layout.preferredWidth: parent.width
             Layout.columnSpan: 2
         }
-        
+
         Button {
             id: btnAddLight
             anchors {
@@ -201,22 +201,22 @@ Item {
             onClicked: addLight()
             enabled: true
         }
-        
+
         Dialog {
             id: newLightsDialogue
             title: i18n("Adding new lights")
             width: 500
             Layout.preferredWidth: 500
-            
+
             property bool scanning : false;
             property int attempt
             standardButtons: StandardButton.OK
-            
+
             ColumnLayout {
                 Layout.fillWidth: true
                 anchors.left: parent.left
                 anchors.right: parent.right
-                
+
                 GroupBox {
                     id: grpNewStatus
                     Layout.fillWidth: true
@@ -224,7 +224,7 @@ Item {
                     anchors.right: parent.right
                     flat: true
                     visible: false
-                    
+
                     Rectangle {
                         id: rctNewStatus
                         width: parent.width
@@ -234,7 +234,7 @@ Item {
                         border.width: 1
                         radius: 5
                     }
-                    
+
                     Label {
                         anchors {
                             horizontalCenter: parent.horizontalCenter
@@ -256,51 +256,51 @@ Item {
                         font.bold: true
                     }
                 }
-                
+
                 Label {
                     Layout.alignment: Qt.AlignCenter
                     text: i18n("New found lights")
                 }
-                
+
                 TableView {
                     id: newLightsTable
                     width: parent.width
-                    
+
                     TableViewColumn {
                         id: newIdCol
                         role: 'uuid'
                         title: i18n('ID')
                         width: parent.width * 0.1
-                        
+
                         delegate: Label {
                             text: styleData.value
                             elide: Text.ElideRight
                         }
                     }
-                    
+
                     TableViewColumn {
                         id: newNameCol
                         role: 'name'
                         title: i18n('Name')
                         width: parent.width * 0.65
-                        
+
                         delegate: Label {
                             text: styleData.value
                             elide: Text.ElideRight
                         }
                     }
-                    
+
                     TableViewColumn {
                         title: i18n('Action')
                         width: parent.width * 0.22
-                        
+
                         delegate: Item {
-                            
+
                             GridLayout {
                                 height: parent.height
                                 columns: 5
                                 rowSpacing: 0
-                                
+
                                 Button {
                                     iconName: 'im-jabber'
                                     tooltip: i18n("Switch on")
@@ -310,7 +310,7 @@ Item {
                                         Hue.switchLight(editItem.uuid, true)
                                     }
                                 }
-                                
+
                                 Button {
                                     iconName: 'system-shutdown'
                                     tooltip: i18n("Switch off")
@@ -320,7 +320,7 @@ Item {
                                         Hue.switchLight(editItem.uuid, false)
                                     }
                                 }
-                                
+
                                 Button {
                                     iconName: 'contrast'
                                     tooltip: i18n("Blink")
@@ -338,29 +338,29 @@ Item {
                     Layout.preferredWidth: parent.width
                     Layout.columnSpan: 2
                 }
-            }    
+            }
         }
-        
+
         Dialog {
             id: editLightDialogue
             title: i18n('Edit light')
             width: 500
-            
+
             property string lightId: ""
-            
+
             standardButtons: StandardButton.Apply | StandardButton.Cancel
-            
+
             onApply: {
                 var strJson  = "{\"name\":"
                 strJson += "\"" + txtLightName.text + "\"}";
                 Hue.modifyLight(editLightDialogue.lightId, strJson, updateLightDone);
             }
-            
+
             ColumnLayout {
                 Layout.fillWidth: true
                 anchors.left: parent.left
                 anchors.right: parent.right
-                
+
                 GroupBox {
                     id: grpDiaStatus
                     Layout.fillWidth: true
@@ -368,7 +368,7 @@ Item {
                     anchors.right: parent.right
                     flat: true
                     visible: false
-                    
+
                     Rectangle {
                         id: rctDiaStatus
                         width: parent.width
@@ -378,7 +378,7 @@ Item {
                         border.width: 1
                         radius: 5
                     }
-                    
+
                     Label {
                         anchors {
                             horizontalCenter: parent.horizontalCenter
@@ -400,19 +400,19 @@ Item {
                         font.bold: true
                     }
                 }
-                
+
                 GridLayout {
                     id: grdTitle
                     anchors.left: parent.left
                     anchors.right: parent.right
                     columns: 3
                     Layout.fillWidth: true
-                    
+
                     Label {
                         Layout.alignment: Qt.AlignRight
                         text: i18n("Light name:")
                     }
-                    
+
                     TextField {
                         id: txtLightName
                         Layout.fillWidth: true
@@ -422,7 +422,7 @@ Item {
             }
         }
     }
-    
+
     MessageDialog {
         id: confirmDeleteDialogue
         visible: false
@@ -442,7 +442,7 @@ Item {
             idToDelete = -1;
         }
     }
-    
+
     Component.onCompleted: {
         if(!Hue.isInitialized()) {
             Hue.initHueConfig();
@@ -450,30 +450,30 @@ Item {
         lightsModel.clear();
         getLights();
     }
-    
+
     function getLights() {
         lightsModel.clear()
         Hue.getLightsIdName(lightsModel);
     }
-    
+
     function resetDialog() {
         txtLightName.text = "";
     }
-    
-    function addLight() {   
+
+    function addLight() {
         if(!newLightsDialogue.scanning) {
             newLightsDialogue.scanning = true;
             Hue.scanNewLights(startScan)
         }
         newLightsDialogue.open()
     }
-    
+
     function startScan() {
         lblNewStatusTitle.text = i18n("Scanning for new lights ...")
         lblNewStatusText.text = i18n("Scanning for") + "60" + i18n("seconds");
         rctNewStatus.color = infoColour;
         grpNewStatus.visible = true;
-        
+
         updateScan(1, 60)
         lightTimer.stop();
         lightTimer.interval = 1000;
@@ -482,9 +482,9 @@ Item {
             updateScan()
         })
         lightTimer.start();
-        
+
     }
-    
+
     function updateScan() {
         var att = newLightsDialogue.attempt;
         if(att == attempts) {
@@ -501,10 +501,10 @@ Item {
         }
         lblNewStatusText.text = i18n("Scanning for") + " " + (attempts - att) + " " + i18n("seconds");
     }
-    
+
     function doneUpdate() {
     }
-    
+
     function updateLightDone(succ, json) {
         if(!succ) {
             lblDiaStatusTitle.text = i18n("Failed to update light");
@@ -543,8 +543,8 @@ Item {
         }
         lightListChanged();
     }
-    
-    
+
+
     function deleteLightDone(succ, json) {
         if(!succ) {
             lblStatusTitle.text = i18n("Failed to delete light");
@@ -576,16 +576,16 @@ Item {
         grpStatus.visible = true;
         lightListChanged();
     }
-    
-    
+
+
     function lightListChanged() {
         updateTimer.start();
     }
-    
+
     Timer {
         id: lightTimer
     }
-    
+
     Timer {
         id: updateTimer
         interval: 400
@@ -593,5 +593,5 @@ Item {
             getLights();
         }
     }
-    
+
 }

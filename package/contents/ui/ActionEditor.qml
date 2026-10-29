@@ -1,17 +1,17 @@
 /*
  *    Copyright 2016-2024 Christian Loosli <develop@fuchsnet.ch>
- * 
+ *
  *    This library is free software; you can redistribute it and/or
  *    modify it under the terms of the GNU Lesser General Public
  *    License as published by the Free Software Foundation; either
  *    version 2.1 of the License, or (at your option) version 3, or any
  *    later version accepted by the original Author.
- * 
+ *
  *    This library is distributed in the hope that it will be useful,
  *    but WITHOUT ANY WARRANTY; without even the implied warranty of
  *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  *    Lesser General Public License for more details.
- * 
+ *
  *    You should have received a copy of the GNU Lesser General Public
  *    License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -19,7 +19,7 @@
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls
-import QtGraphicalEffects 
+import QtGraphicalEffects
 import org.kde.plasma.core as PlasmaCore
 import "../code/hue.js" as Hue
 
@@ -28,7 +28,7 @@ ColumnLayout {
     Layout.fillWidth: true
     anchors.left: parent.left
     anchors.right: parent.right
-    
+
     property string strOriginalBody
     property string strOriginalAddress
     property string strOriginalMethod
@@ -40,41 +40,41 @@ ColumnLayout {
     property bool useOriginalTtype: false
     property bool useOriginalTid: false
     property bool isEnabled
-    
+
     ListModel {
         id: typeModel
     }
-    
+
     ListModel {
         id: targetModel
     }
-    
+
     Label {
         id: lblCt
         visible: false
         text: "296"
     }
-    
+
     Label {
         id: lblHue
         visible: false
     }
-    
+
     Label {
         id: lblSat
         visible: false
     }
-    
+
     Label {
         id: lblGroupId
         visible: false
     }
-    
+
     Label {
         id: lblLightId
         visible: false
     }
-    
+
     GroupBox {
         id: grpStatus
         Layout.fillWidth: true
@@ -82,7 +82,7 @@ ColumnLayout {
         anchors.right: parent.right
         flat: true
         visible: false
-        
+
         Rectangle {
             id: rctStatus
             width: parent.width
@@ -92,7 +92,7 @@ ColumnLayout {
             border.width: 1
             radius: 5
         }
-        
+
         Label {
             anchors {
                 horizontalCenter: parent.horizontalCenter
@@ -114,23 +114,23 @@ ColumnLayout {
             font.bold: true
         }
     }
-    
+
     GridLayout {
         height: parent.height
         columns: 3
         rowSpacing: 5
-        
+
         Label {
             text: i18n("Target")
         }
-        
+
         ComboBox {
             id: cbType
             model: typeModel
             onCurrentIndexChanged: setTargetModel()
             enabled: isEnabled
         }
-        
+
         ComboBox {
             id: cbTarget
             Layout.fillWidth: true
@@ -138,15 +138,15 @@ ColumnLayout {
             textRole: 'text'
             enabled: isEnabled
         }
-        
+
         CheckBox {
             id: chkOn
             text: i18n("State")
             enabled: isEnabled
         }
-        
+
         ExclusiveGroup { id: stateGroup }
-        
+
         RadioButton {
             id: rbOn
             text: i18n("On")
@@ -154,41 +154,41 @@ ColumnLayout {
             exclusiveGroup: stateGroup
             enabled: isEnabled && chkOn.checked
         }
-        
+
         RadioButton {
             id: rbOff
             text: i18n("Off")
             exclusiveGroup: stateGroup
             enabled: isEnabled && chkOn.checked
         }
-        
+
         CheckBox {
             id: chkBri
             text: i18n("Brightness")
             enabled: isEnabled
         }
-        
+
         Slider {
             id: sldBri
             Layout.columnSpan: 2
             Layout.fillWidth: true
-            enabled: isEnabled && chkBri.checked 
+            enabled: isEnabled && chkBri.checked
             minimumValue: 0
             maximumValue: 255
             updateValueWhileDragging : false
             stepSize: 1
-            
+
         }
-        
+
         CheckBox {
             id: chkEffect
             checked: false
             text: i18n("Effect")
             enabled: isEnabled
         }
-        
+
         ExclusiveGroup { id: effectGroup }
-        
+
         RadioButton {
             id: rbStopEffect
             text: i18n("None")
@@ -196,7 +196,7 @@ ColumnLayout {
             exclusiveGroup: effectGroup
             enabled: isEnabled && chkEffect.checked
         }
-        
+
         RadioButton {
             id: rbColourLoop
             text: i18n("Colourloop")
@@ -204,15 +204,15 @@ ColumnLayout {
             exclusiveGroup: effectGroup
             enabled: isEnabled && chkEffect.checked
         }
-        
+
         CheckBox {
             id: chkCol
             text: i18n("Colour")
             enabled: isEnabled
         }
-        
+
         ExclusiveGroup { id: colorGroup }
-        
+
         RadioButton {
             id: rbTemp
             text: i18n("Temperature")
@@ -227,20 +227,20 @@ ColumnLayout {
             enabled: isEnabled && chkCol.checked
         }
     }
-    
+
     GridLayout {
         height: parent.height
         columns: 3
         rowSpacing: 0
-        
+
         Rectangle {
             id: circle
-            
+
             anchors {
                 leftMargin: units.LargeSpacing
                 topMargin: units.LargeSpacing
             }
-            
+
             height: 40
             width: 40
             border.color: "#99999999"
@@ -249,23 +249,23 @@ ColumnLayout {
             radius: width * 0.5
             antialiasing: true
         }
-        
-        
+
+
         GroupBox {
             flat: true
             Layout.fillWidth: true
             Layout.columnSpan: 2
-            
+
             TemperatureChooser {
                 id: tmpChsr
                 height: 50
                 Layout.fillWidth: true
-                
+
                 anchors {
                     horizontalCenter: parent.horizontalCenter
                 }
                 visible: rbTemp.checked
-                
+
                 onReleased: {
                     if(chkCol.checked && isEnabled) {
                         // Minimal ct is 153 mired, maximal is 500. Thus we have a range of 347.
@@ -275,77 +275,77 @@ ColumnLayout {
                     }
                 }
             }
-            
+
             ColourChooser {
                 id: clrChooser
                 height: 50
                 Layout.fillWidth: true
-                
+
                 anchors {
                     horizontalCenter: parent.horizontalCenter
                 }
                 visible: rbColour.checked
-                
+
                 onReleased: {
                     if(chkCol.checked && isEnabled)
                     {
                         var vhue = Math.round(Math.min(65535 - ( (65535 / clrChooser.rectWidth) * mouseX), 65535));
                         var vsat = Math.round(Math.min(254 - ( (254 / clrChooser.rectHeight) * mouseY), 254));
                         setColourHS(vhue, vsat)
-                        lblSat.text = vsat; 
+                        lblSat.text = vsat;
                         lblHue.text = vhue;
                     }
                 }
             }
         }
-        
+
         CheckBox {
             id: chkFade
             checked: false
             text: i18n("Fade")
             enabled: isEnabled
         }
-        
+
         // If I got a Swiss Franc for every layout hack needed,
         // I'd be rich enough to buy me a nice dinosaur. *RAWR*
         GroupBox {
             Layout.columnSpan: 2
             Layout.fillWidth: true
             flat: true
-            
+
             GridLayout {
                 columns: 2
-                
+
                 SpinBox {
                     id: sbTime
                     decimals: 1
                     maximumValue: 65534
                     enabled: isEnabled && chkFade.checked
                 }
-                
+
                 Label {
                     text: i18n("seconds")
                 }
             }
         }
-        
+
         CheckBox {
             id: chkBlink
             checked: false
             text: i18n("Blink")
             enabled: isEnabled
         }
-        
+
         GroupBox {
             Layout.columnSpan: 2
             Layout.fillWidth: true
             flat: true
-            
+
             GridLayout {
                 columns: 4
-                
+
                 ExclusiveGroup { id: blinkGroup }
-                
+
                 RadioButton {
                     id: rbStopBlink
                     text: i18n("Stop")
@@ -369,7 +369,7 @@ ColumnLayout {
             }
         }
     }
-    
+
     Component.onCompleted: {
         initType();
         if(!Hue.isInitialized()) {
@@ -377,7 +377,7 @@ ColumnLayout {
         }
         isEnabled = true;
     }
-    
+
     function setTargetModel() {
         if(cbType.currentIndex == 0) {
             fetchGroups();
@@ -386,7 +386,7 @@ ColumnLayout {
             fetchLights();
         }
     }
-    
+
     function reset() {
         isEnabled = true;
         grpStatus.visible = false;
@@ -400,8 +400,8 @@ ColumnLayout {
         chkBri.checked = false;
         chkCol.checked = false;
         chkOn.checked = false;
-        rbOn.checked = true; 
-        rbTemp.checked = true; 
+        rbOn.checked = true;
+        rbTemp.checked = true;
         sldBri.value = 0;
         chkFade.checked = false;
         sbTime.value = 0.0;
@@ -415,24 +415,24 @@ ColumnLayout {
         setColourCT(lblCt.text);
         fetchGroups();
     }
-    
+
     function initType() {
         typeModel.clear();
         typeModel.append( { text: i18n("Group"), value: "groups" });
         typeModel.append( { text: i18n("Light"), value: "lights" });
     }
-    
+
     function fetchGroups() {
         targetModel.clear()
         targetModel.append( { text: "0: " + i18n("All lights"), value: "0", uuid: "0"} );
         Hue.getGroupsIdName(targetModel, gotGroups);
     }
-    
+
     function fetchLights() {
         targetModel.clear()
         Hue.getLightsIdName(targetModel, gotLights);
     }
-    
+
     function gotGroups() {
         if(lblGroupId.text) {
             for(var i = 0; i < targetModel.count; ++i) {
@@ -442,7 +442,7 @@ ColumnLayout {
             }
         }
     }
-    
+
     function gotLights() {
         if(lblLightId.text) {
             for(var i = 0; i < targetModel.count; ++i) {
@@ -452,53 +452,53 @@ ColumnLayout {
             }
         }
     }
-    
+
     function getTargetId() {
         if(useOriginalTid) {
             return strOiginalTid;
         }
         return targetModel.get(cbTarget.currentIndex).uuid;
     }
-    
+
     function getType() {
         if(useOriginalTtype) {
             return strOriginalTtype;
         }
         return typeModel.get(cbType.currentIndex).value;
     }
-    
+
     function setColourHS(phue, psat) {
         // qt expects hue and saturation as 0..1 value, so we have to convert
         var hue = 0.00001525902 * phue
         var sat = 0.003937 * psat;
-        
+
         circle.color = Qt.hsva(hue, sat, 1, 1)
     }
-    
+
     function setColourCT(pct) {
         if(pct < 190) {
-            circle.color = "#94feff";  
+            circle.color = "#94feff";
         }
         else if(pct < 240) {
-            circle.color = "#c5ffff";  
+            circle.color = "#c5ffff";
         }
         else if(pct < 300) {
-            circle.color = "#ffffff";  
+            circle.color = "#ffffff";
         }
         else if(pct < 350) {
-            circle.color = "#fff8d2";  
+            circle.color = "#fff8d2";
         }
         else if(pct < 400) {
-            circle.color = "#ffedc2";  
+            circle.color = "#ffedc2";
         }
         else if(pct < 440) {
-            circle.color = "#ffddb3";  
+            circle.color = "#ffddb3";
         }
         else {
-            circle.color = "#ff9500";  
+            circle.color = "#ff9500";
         }
     }
-    
+
     function getPayload() {
         var strPayload = "";
         var cBri = chkBri.checked;
@@ -524,11 +524,11 @@ ColumnLayout {
                     content.push("\"ct\":" + lblCt.text + ",\"colormode\":\"ct\"");
                 }
             }
-            
+
             if(cFad) {
                 content.push("\"transitiontime\":" + sbTime.value * 10)
             }
-            
+
             if(chkBlink.checked) {
                 if(rbStopBlink.checked) {
                     content.push("\"alert\":\"none\"");
@@ -540,7 +540,7 @@ ColumnLayout {
                     content.push("\"alert\":\"lselect\"");
                 }
             }
-            
+
             if(chkEffect.checked) {
                 if(rbStopEffect.checked) {
                     content.push("\"effect\":\"none\"");
@@ -549,27 +549,27 @@ ColumnLayout {
                     content.push("\"effect\":\"colorloop\"");
                 }
             }
-            
+
             payload += content.join(",");
-            
+
             payload += "}";
         }
-        
+
         return payload;
     }
-    
+
     function getBody() {
         if(useOriginalBody) {
             return strOriginalBody;
         }
         return getPayload();
     }
-    
+
     function getAddress() {
         if(useOriginalAddress) {
             return strOriginalAddress;
         }
-        
+
         var strAddress = "/api/" + plasmoid.configuration.authToken;
         if(cbType.currentIndex == 0) {
             strAddress += "/groups/"
@@ -583,14 +583,14 @@ ColumnLayout {
         }
         return strAddress;
     }
-    
+
     function getMethod() {
         if(useOriginalMethod) {
             return strOriginalMethod;
         }
         return "PUT";
     }
-    
+
     function fillValues(commandObj) {
         if(commandObj.valid) {
             initType();
@@ -601,7 +601,7 @@ ColumnLayout {
                 lblLightId.text = commandObj.targetId;
             }
             if(commandObj.group) {
-                cbType.currentIndex = 0; 
+                cbType.currentIndex = 0;
             }
             else {
                 cbType.currentIndex = 1;
@@ -667,15 +667,15 @@ ColumnLayout {
             grpStatus.visible = true;
         }
     }
-    
+
     function setCommand(objCommand) {
         var commandObj = Hue.parseHueCommandObject(objCommand);
         fillValues(commandObj);
     }
-    
+
     function setAction(objAction) {
         var commandObj = Hue.parseHopplaActionObject(objAction);
         fillValues(commandObj);
     }
-    
+
 }

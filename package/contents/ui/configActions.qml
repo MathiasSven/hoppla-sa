@@ -1,17 +1,17 @@
 /*
  *    Copyright 2016-2024 Christian Loosli <develop@fuchsnet.ch>
- * 
+ *
  *    This library is free software; you can redistribute it and/or
  *    modify it under the terms of the GNU Lesser General Public
  *    License as published by the Free Software Foundation; either
  *    version 2.1 of the License, or (at your option) version 3, or any
  *    later version accepted by the original Author.
- * 
+ *
  *    This library is distributed in the hope that it will be useful,
  *    but WITHOUT ANY WARRANTY; without even the implied warranty of
  *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  *    Lesser General Public License for more details.
- * 
+ *
  *    You should have received a copy of the GNU Lesser General Public
  *    License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -29,7 +29,7 @@ Item {
     KCoreAddons.KUser {
         id: kuser
     }
-    
+
     property alias cfg_actionlist: actionList.text
     property string infoColour: "#5555ff"
     property string errorColour: "#ff0000"
@@ -37,32 +37,32 @@ Item {
     property bool isEditing: false
     property int rowToDelete: -1
     property int editId: -1
-    
+
     width: parent.width
     anchors.left: parent.left
     anchors.right: parent.right
-    
+
     ListModel {
         id: actionListModel
     }
-    
+
     ListModel {
         id: actListModel
     }
-    
+
     ListModel {
         id: colourModel
     }
-    
+
     ListModel {
         id: iconModel
     }
-    
+
     ColumnLayout {
         Layout.fillWidth: true
         anchors.left: parent.left
         anchors.right: parent.right
-        
+
         GroupBox {
             id: grpStatus
             Layout.fillWidth: true
@@ -70,7 +70,7 @@ Item {
             anchors.right: parent.right
             flat: true
             visible: false
-            
+
             Rectangle {
                 id: rctStatus
                 width: parent.width
@@ -80,7 +80,7 @@ Item {
                 border.width: 1
                 radius: 5
             }
-            
+
             Label {
                 anchors {
                     horizontalCenter: parent.horizontalCenter
@@ -102,47 +102,47 @@ Item {
                 font.bold: true
             }
         }
-        
+
         TableView {
             id: actionsTable
             width: parent.width
-            
+
             TableViewColumn {
                 id: titleCol
                 role: 'title'
                 title: i18n('Title')
                 width: parent.width * 0.28
-                
+
                 delegate: Label {
                     text: styleData.value
                     elide: Text.ElideRight
                 }
             }
-            
+
             TableViewColumn {
                 id: subtitleCol
                 role: 'subtitle'
                 title: i18n('Subtitle')
                 width: parent.width * 0.36
-                
+
                 delegate: Label {
                     text: styleData.value
                     elide: Text.ElideRight
                 }
             }
-            
+
             TableViewColumn {
                 title: i18n('Action')
                 width: parent.width * 0.3
-                
+
                 delegate: Item {
-                    
+
                     GridLayout {
                         height: parent.height
                         columns: 4
                         rowSpacing: 0
-                        
-                        
+
+
                         Button {
                             iconName: 'entry-edit'
                             tooltip: i18n("Edit")
@@ -161,7 +161,7 @@ Item {
                                 }
                             }
                         }
-                        
+
                         Button {
                             iconName: 'go-up'
                             tooltip: i18n("Move up");
@@ -172,7 +172,7 @@ Item {
                             }
                             enabled: styleData.row > 0
                         }
-                        
+
                         Button {
                             iconName: 'go-down'
                             tooltip: i18n("Move down")
@@ -183,7 +183,7 @@ Item {
                             }
                             enabled: styleData.row < actionListModel.count - 1
                         }
-                        
+
                         Button {
                             iconName: 'list-remove'
                             tooltip: i18n("Remove")
@@ -201,7 +201,7 @@ Item {
             Layout.preferredWidth: parent.width
             Layout.columnSpan: 2
         }
-        
+
         Button {
             id: btnAddAction
             anchors {
@@ -210,7 +210,7 @@ Item {
             text: i18n("Add new action")
             onClicked: addAction()
         }
-        
+
         TextArea {
             id: actionList
             Layout.fillWidth: true
@@ -220,17 +220,17 @@ Item {
             height: 20
         }
     }
-    
+
     Dialog {
         id: editActionDialogue
         width: 500
         height: 500
         title: i18n('Add or edit action')
-        
+
         standardButtons: StandardButton.Ok | StandardButton.Cancel
-        
+
         onAccepted: {
-            
+
             if(editActionDialogue.tableIndex >= 0) {
                 actionListModel.setProperty(editActionDialogue.tableIndex, 'title', txtTitle.text)
                 actionListModel.setProperty(editActionDialogue.tableIndex, 'subtitle', txtSubTitle.text)
@@ -255,54 +255,54 @@ Item {
                 for(var a = 0; a < actListModel.count; ++a) {
                     acts.append(actListModel.get(a));
                 }
-                
+
             }
             actionListChanged();
             editActionDialogue.close();
         }
-        
+
         property int tableIndex: 0
-        
-        
+
+
         ColumnLayout {
             Layout.fillWidth: true
             anchors.left: parent.left
             anchors.right: parent.right
-            
+
             GridLayout {
                 id: grdTitle
                 anchors.left: parent.left
                 anchors.right: parent.right
                 columns: 4
                 Layout.fillWidth: true
-                
+
                 Label {
                     Layout.alignment: Qt.AlignRight
                     text: i18n("Title:")
                 }
-                
+
                 TextField {
                     id: txtTitle
                     Layout.columnSpan: 3
                     Layout.fillWidth: true
                 }
-                
+
                 Label {
                     Layout.alignment: Qt.AlignRight
                     text: i18n("Subtitle:")
                 }
-                
+
                 TextField {
                     id: txtSubTitle
                     Layout.columnSpan : 3
                     Layout.fillWidth: true
                 }
-                
+
                 Label {
                     Layout.alignment: Qt.AlignRight
                     text: i18n("Icon:")
                 }
-                
+
                 ComboBox {
                     id: cbIcon
                     Layout.fillWidth: true
@@ -310,20 +310,20 @@ Item {
                     model: iconModel
                     onCurrentIndexChanged: setIcon()
                 }
-                
+
                 ComboBox {
                     id: cbIconColour
                     Layout.fillWidth: true
                     textRole: "text"
-                    model: colourModel 
+                    model: colourModel
                     onCurrentIndexChanged: setIcon()
                 }
-                
+
                 PlasmaCore.Svg {
                     id: mySvg
                     size:  units.iconSizes.small
                 }
-                
+
                 PlasmaCore.SvgItem {
                     id: actionIcon
                     height: units.iconSizes.small
@@ -332,23 +332,23 @@ Item {
                     svg: mySvg
                 }
             }
-            
+
             Label {
                 id: lblActions
                 text: i18n("Commands:")
             }
-            
+
             TableView {
                 id: actTable
                 width: parent.width
                 enabled: !isEditing
-                
+
                 TableViewColumn {
                     id: typeCol
                     role: 'ttype'
                     title: i18n('Type')
                     width: parent.width * 0.15
-                    
+
                     delegate: Label {
                         text: styleData.value
                         elide: Text.ElideRight
@@ -358,41 +358,41 @@ Item {
                         anchors.rightMargin: 5
                     }
                 }
-                
+
                 TableViewColumn {
                     id: idCol
                     role: 'tid'
                     title: i18n('Id')
                     width: parent.width * 0.1
-                    
+
                     delegate: Label {
                         text: styleData.value
                     }
                 }
-                
+
                 TableViewColumn {
                     id: payloadCol
                     role: 'payload'
                     title: i18n('Payload')
                     width: parent.width * 0.58
-                    
+
                     delegate: Label {
                         text: styleData.value
                         elide: Text.ElideRight
                     }
                 }
-                
+
                 TableViewColumn {
                     title: i18n('Action')
                     width: parent.width * 0.16
-                    
+
                     delegate: Item {
-                        
+
                         GridLayout {
                             height: parent.height
                             columns: 2
                             rowSpacing: 0
-                            
+
                             Button {
                                 iconName: 'entry-edit'
                                 tooltip: i18n("Edit")
@@ -410,7 +410,7 @@ Item {
                                     actTable.selection.select(styleData.row);
                                 }
                             }
-                            
+
                             Button {
                                 iconName: 'list-remove'
                                 tooltip: i18n("Remove")
@@ -428,17 +428,17 @@ Item {
                 Layout.preferredWidth: parent.width
                 Layout.columnSpan: 2
             }
-            
+
             GroupBox {
                 Layout.fillWidth: true
                 Layout.alignment: Qt.AlignRight
                 id: grpNewAction
                 title: isEditing ? i18n("Edit command") : i18n("New command");
-                
+
                 ActionEditor {
                     id: actionEditor
                 }
-                
+
                 Button {
                     anchors {
                         top: actionEditor.bottom
@@ -450,7 +450,7 @@ Item {
                     visible: isEditing
                     onClicked: cancelEdit()
                 }
-                
+
                 Button {
                     anchors {
                         top: actionEditor.bottom
@@ -464,7 +464,7 @@ Item {
             }
         }
     }
-    
+
     MessageDialog {
         id: confirmDeleteDialogue
         visible: false
@@ -485,20 +485,20 @@ Item {
             rowToDelete = -1;
         }
     }
-    
+
     Component.onCompleted: {
         if(!Hue.isInitialized()) {
             Hue.initHueConfig();
         }
         actionListModel.clear();
-        
+
         try {
             var actionItems = JSON.parse(actionList.text);
         }
         catch(e) {
             return;
         }
-        
+
         for(var uuid in actionItems) {
             var cItem = actionItems[uuid];
             var actionItem = {};
@@ -511,7 +511,7 @@ Item {
             actionListModel.append(actionItem);
         }
 
-        iconModel.append( { text: i18n("Bulb"), value: "bulb" } )    
+        iconModel.append( { text: i18n("Bulb"), value: "bulb" } )
         iconModel.append( { text: i18n("Group"), value: "group" } )
         iconModel.append( { text: i18n("Bathroom"), value: "bathroom" } )
         iconModel.append( { text: i18n("Bedroom"), value: "bedroom" } )
@@ -577,13 +577,13 @@ Item {
         colourModel.append( { text: i18n("Yellow"), value: "yellow" } )
         colourModel.append( { text: i18n("Inverted Rainbow"), value: "rainbow2" } )
     }
-    
+
     function setIcon() {
         var iconName = iconModel.get(cbIcon.currentIndex).value;
         var iconColour = colourModel.get(cbIconColour.currentIndex).value;
         mySvg.imagePath = Qt.resolvedUrl("../images/" + iconName + "-" + iconColour + ".svg");
     }
-    
+
     function getIcon() {
         var strIcon = "";
         strIcon += iconModel.get(cbIcon.currentIndex).value;
@@ -592,7 +592,7 @@ Item {
         strIcon += ".svg"
         return strIcon;
     }
-    
+
     function setIconCb(iconText) {
         var icn = iconText.split("-");
         if(icn.length < 2) {
@@ -600,7 +600,7 @@ Item {
         }
         var iconVal = icn[0];
         var colrVal = icn[1].replace(".svg","");
-        
+
         for(var i = 0; i < iconModel.count; ++i) {
             if(iconVal == iconModel.get(i).value) {
                 cbIcon.currentIndex = i;
@@ -612,14 +612,14 @@ Item {
                 cbIconColour.currentIndex = i;
             }
         }
-        
+
     }
-    
+
     function addAction() {
         editActionDialogue.open();
         resetDialog();
     }
-    
+
     function resetDialog() {
         editActionDialogue.tableIndex = -1;
         editId = -1;
@@ -632,13 +632,13 @@ Item {
         actionEditor.reset();
         setIcon();
     }
-    
+
     function cancelEdit() {
         isEditing = false;
         editId = -1;
         actionEditor.reset();
     }
-    
+
     function addAct() {
         var payload = "";
         payload = actionEditor.getPayload();
@@ -659,12 +659,12 @@ Item {
                 actionListChanged();
                 editId = -1;
                 isEditing = false;
-                
+
             }
             actionEditor.reset();
         }
     }
-    
+
     function actionListChanged() {
         // jsonify doesn't work, due to how Qt internally handles the objects
         var actionArray = []
@@ -692,7 +692,7 @@ Item {
             }
         }
         strJson += "}"
-        
+
         actionList.text = strJson;
     }
 

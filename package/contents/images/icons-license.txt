@@ -1,13 +1,13 @@
-Most icons are created by Andrew Lake of the KDE VDG, 
-licensed LGPL2 among the rest of this plasmoid, 
-see COPYING for details on that. 
+Most icons are created by Andrew Lake of the KDE VDG,
+licensed LGPL2 among the rest of this plasmoid,
+see COPYING for details on that.
 
 The kitchen-{light, dark} icon has been created by Christian Loosli,
-licensed LGPL2 among the rest of this plasmoid, 
-see COPYING for details on that. 
+licensed LGPL2 among the rest of this plasmoid,
+see COPYING for details on that.
 
-The group-{light,dark}, recreation-{light,dark} and other-{light, dark} icons, 
-are taken from the breeze theme, licensed as followed: 
+The group-{light,dark}, recreation-{light,dark} and other-{light, dark} icons,
+are taken from the breeze theme, licensed as followed:
 
 
 The Breeze Icon Theme in icons/
@@ -66,7 +66,7 @@ Clarification:
 the terms and conditions of version 3 of the GNU General Public
 License, supplemented by the additional permissions listed below.
 
-  0. Additional Definitions. 
+  0. Additional Definitions.
 
   As used herein, "this License" refers to version 3 of the GNU Lesser
 General Public License, and the "GNU GPL" refers to version 3 of the GNU
@@ -167,7 +167,7 @@ the following:
        a copy of the Library already present on the user's computer
        system, and (b) will operate properly with a modified version
        of the Library that is interface-compatible with the Linked
-       Version. 
+       Version.
 
    e) Provide Installation Information, but only if you would otherwise
    be required to provide such information under section 6 of the

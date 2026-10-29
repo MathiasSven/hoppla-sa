@@ -1,17 +1,17 @@
 /*
  *    Copyright 2016-2017 Christian Loosli <develop@fuchsnet.ch>
- * 
+ *
  *    This library is free software; you can redistribute it and/or
  *    modify it under the terms of the GNU Lesser General Public
  *    License as published by the Free Software Foundation; either
  *    version 2.1 of the License, or (at your option) version 3, or any
  *    later version accepted by the original Author.
- * 
+ *
  *    This library is distributed in the hope that it will be useful,
  *    but WITHOUT ANY WARRANTY; without even the implied warranty of
  *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  *    Lesser General Public License for more details.
- * 
+ *
  *    You should have received a copy of the GNU Lesser General Public
  *    License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -42,7 +42,7 @@ function initHueConfig() {
     initialized = true;
 }
 
-// RAW PUT 
+// RAW PUT
 
 /**
  * Function to put raw payload to an url
@@ -68,8 +68,8 @@ function getHueConfigured() {
     if(!isInitialized()) {
         initHueConfig();
     }
-    
-    var base = plasmoid.configuration.baseURL 
+
+    var base = plasmoid.configuration.baseURL
     var auth = plasmoid.configuration.authToken
     if(!base || !auth) {
         // something went terribly wrong here
@@ -144,8 +144,8 @@ function getLight(myModel, lightId) {
 }
 
 /**
- * Helper to fill light names and id 
- * into a model (used by config dialogue) 
+ * Helper to fill light names and id
+ * into a model (used by config dialogue)
  * The model will not be cleared beforehand.
  * @param {ListModel} myModel model to fill with text and value
  */
@@ -181,7 +181,7 @@ function updateLight(myLight, myDelay) {
         return;
     }
     var myUrl = "lights/" + myLight.vuuid;
-    
+
     var mytimer = new Timer();
     mytimer.interval = myDelay;
     mytimer.repeat = false;
@@ -227,8 +227,8 @@ function getGroups(myModel) {
 }
 
 /**
- * Helper to fill group names and id, 
- * into a model (used by config dialogue). 
+ * Helper to fill group names and id,
+ * into a model (used by config dialogue).
  * The model will not be cleared beforehand.
  * @param {ListModel} myModel model to fill with text and value
  */
@@ -248,7 +248,7 @@ function getGroupsIdName(myModel, doneCb) {
  * fills them into a ListModel
  *
  * @param {ListModel} myList The model to fill with hue groups.
- * @param {string} myLights comma separated string (array syntax) of hue light ids 
+ * @param {string} myLights comma separated string (array syntax) of hue light ids
  */
 function getGroupLights(myList, myLights) {
     if(noConnection) {
@@ -274,7 +274,7 @@ function updateGroup(myGroup, myDelay) {
         return;
     }
     var myUrl = "groups/" + myGroup.vuuid;
-    
+
     var mytimer = new Timer();
     mytimer.interval = myDelay;
     mytimer.repeat = false;
@@ -509,20 +509,20 @@ function setLightColourHS(lightId, hue, sat) {
  * @param {String} hostname the Hostname passed to hue, set to "unknowndevice" if empty
  * @param {Function} sCb callback function in case of successful authentication
  * @param {Function} fCb callback function in case of a failure
- * 
+ *
  */
 function authenticateWithBridge(bridgeUrl, hostname, sCb, fCb) {
     if(bridgeUrl.search(":/") < 0) {
-        // No protocol given. Default to http, most likely protocol. 
-        // Protocols not starting with / are thus not supported, 
+        // No protocol given. Default to http, most likely protocol.
+        // Protocols not starting with / are thus not supported,
         // that should be fine for an html request
         bridgeUrl = "http://" + bridgeUrl;
     }
-    
+
     var appname = "Hoppla-SA";
     // https://www.developers.meethue.com/documentation/configuration-api#71_create_user
-    var maxLength = 19; 
-    
+    var maxLength = 19;
+
     if (!hostname) {
         hostname = "unknowndevice"
     }
@@ -532,7 +532,7 @@ function authenticateWithBridge(bridgeUrl, hostname, sCb, fCb) {
         }
     }
     var body =  '{"devicetype":"' + appname + '#' + hostname + '"}'
-    var attempt = 1; 
+    var attempt = 1;
     var attempts = 12;
     var postUrl = bridgeUrl + "/api";
     postAuthToHue(postUrl, body, attempt, attempts, authSuccess, authFail, sCb, fCb)
@@ -570,7 +570,7 @@ function authSuccess(json, postUrl, body, att, maxAtt, request, gSuccCb, gFailCb
     if(!myResult[0]) {
         return;
     }
-    
+
     if(myResult[0].error) {
         if(myResult[0].error.type == 101) {
             var attempt = ++att;
@@ -588,7 +588,7 @@ function authSuccess(json, postUrl, body, att, maxAtt, request, gSuccCb, gFailCb
         gSuccCb(myResult[0].success.username);
         return;
     }
-    
+
     var attempt = ++att;
     var mytimer = new Timer();
     mytimer.interval = 5000;
@@ -600,7 +600,7 @@ function authSuccess(json, postUrl, body, att, maxAtt, request, gSuccCb, gFailCb
     gFailCb("unknown error");
 }
 
-// HELPERS 
+// HELPERS
 
 function getRequest(pUrl, pType, forceBase, forceAlt) {
     var request = new XMLHttpRequest();
@@ -611,7 +611,7 @@ function getRequest(pUrl, pType, forceBase, forceAlt) {
     if((!forceBase && useAltConnection) || forceAlt) {
         base = plasmoid.configuration.altURL
         if(base.search(":/") < 0) {
-            // No protocol given. Default to http, most likely protocol. 
+            // No protocol given. Default to http, most likely protocol.
             // Protocols not starting with / are thus not supported,
             // that should be fine for an html request
             base = "http://" + base;
@@ -624,7 +624,7 @@ function getRequest(pUrl, pType, forceBase, forceAlt) {
     else {
         base = plasmoid.configuration.baseURL
         if(base.search(":/") < 0) {
-            // No protocol given. Default to http, most likely protocol. 
+            // No protocol given. Default to http, most likely protocol.
             // Protocols not starting with / are thus not supported,
             // that should be fine for an html request
             base = "http://" + base;
@@ -636,7 +636,7 @@ function getRequest(pUrl, pType, forceBase, forceAlt) {
     }
     var auth = plasmoid.configuration.authToken
     var url = base + "/api/" + auth + "/" + pUrl
-    
+
     if(useAuth) {
         request.open(pType, url, true, username, password);
     }
@@ -678,7 +678,7 @@ function checkHueConnection (callback, enforce) {
                         callback("none", enforce);
                         return;
                     }
-                    
+
                     var json = altRequest.responseText;
                     try {
                         var myResult = JSON.parse(json);
@@ -692,7 +692,7 @@ function checkHueConnection (callback, enforce) {
                         useAltConnection = true;
                         return;
                     }
-                    
+
                     if(myResult[0].error) {
                         if(myResult[0].error.type == 1) {
                             callback("unauth", enforce);
@@ -738,8 +738,8 @@ function checkHueConnection (callback, enforce) {
  * @param {function} successCallback call on success, json, object, object2 and a done callback as params
  * @param {function} failureCallback call on failure, request and done callback as params
  * @param {function} doneCallback called when all is handled
- * @param {Object} object object to pass to the success function, e.g. a model 
- * @param {Object} object2 object to pass to the success function, e.g. a model 
+ * @param {Object} object object to pass to the success function, e.g. a model
+ * @param {Object} object2 object to pass to the success function, e.g. a model
  */
 function getJsonFromHue(getUrl, successCallback, failureCallback, doneCallback, object, object2) {
     var request = getRequest(getUrl, 'GET');
@@ -747,7 +747,7 @@ function getJsonFromHue(getUrl, successCallback, failureCallback, doneCallback, 
         if (request.readyState !== XMLHttpRequest.DONE) {
             return;
         }
-        
+
         if (request.status !== 200) {
             if(!useAltConnection && altConnectionEnabled) {
                 dbgPrint("Request to " + getUrl + " failed, trying alt URL")
@@ -762,7 +762,7 @@ function getJsonFromHue(getUrl, successCallback, failureCallback, doneCallback, 
                         noConnection = true;
                         failureCallback(altRequest, doneCallback);
                     }
-                    
+
                     var json = altRequest.responseText;
                     successCallback(json, object, object2, doneCallback);
                     noConnection = false;
@@ -806,13 +806,13 @@ function putJsonToHue(putUrl, payload, successCallback, failureCallback, doneCal
                     if (altRequest.readyState !== XMLHttpRequest.DONE) {
                         return;
                     }
-                    
+
                     if (altRequest.status !== 200) {
                         dbgPrint("Request to " + putUrl + " failed with alt URL as well")
                         failureCallback(altRequest, doneCallback);
                         noConnection = true;
                     }
-                    
+
                     var json = altRequest.responseText;
                     successCallback(json, doneCallback);
                     noConnection = false;
@@ -825,7 +825,7 @@ function putJsonToHue(putUrl, payload, successCallback, failureCallback, doneCal
                 noConnection = true;
             }
         }
-        
+
         var json = request.responseText;
         successCallback(json, doneCallback);
         noConnection = false;
@@ -857,13 +857,13 @@ function postJsonToHue(postUrl, payload, successCallback, failureCallback, doneC
                     if (altRequest.readyState !== XMLHttpRequest.DONE) {
                         return;
                     }
-                    
+
                     if (altRequest.status !== 200) {
                         dbgPrint("Request to " + postUrl + " failed with alt URL as well")
                         failureCallback(altRequest, doneCallback);
                         noConnection = true;
                     }
-                    
+
                     var json = altRequest.responseText;
                     successCallback(json, doneCallback);
                     noConnection = false;
@@ -876,7 +876,7 @@ function postJsonToHue(postUrl, payload, successCallback, failureCallback, doneC
                 noConnection = true;
             }
         }
-        
+
         var json = request.responseText;
         successCallback(json, doneCallback);
         noConnection = false;
@@ -905,12 +905,12 @@ function postAuthToHue(postUrl, body, att, maxAtt, lSuccCb, lFailCb, gSuccCb, gF
         if (request.readyState !== XMLHttpRequest.DONE) {
             return;
         }
-        
+
         if (request.status !== 200) {
             lFailCb(postUrl, body, att, maxAtt, request, gSuccCb, gFailCb);
             return;
         }
-        
+
         var json = request.responseText;
         lSuccCb(json, postUrl, body, att, maxAtt, request, gSuccCb, gFailCb);
     }
@@ -940,13 +940,13 @@ function deleteRequestToHue(deleteUrl, successCallback, failureCallback, doneCal
                     if (altRequest.readyState !== XMLHttpRequest.DONE) {
                         return;
                     }
-                    
+
                     if (altRequest.status !== 200) {
                         dbgPrint("Request to " + deleteUrl + " failed with alt URL as well")
                         failureCallback(altRequest, doneCallback);
                         noConnection = true;
                     }
-                    
+
                     var json = altRequest.responseText;
                     successCallback(json, doneCallback);
                     noConnection = false;
@@ -959,7 +959,7 @@ function deleteRequestToHue(deleteUrl, successCallback, failureCallback, doneCal
                 noConnection = true;
             }
         }
-        
+
         var json = request.responseText;
         successCallback(json, doneCallback);
         noConnection = false;
@@ -983,7 +983,7 @@ function baseDone(success, json) {
 
 /**
  * Skeleton function to call on failure, will print debug output and call doneCallback
- * @param {XHTTPRequest} request 
+ * @param {XHTTPRequest} request
  * @param {function} doneCallback will be called at the end
  */
 function baseFail(request, doneCallback) {
@@ -994,12 +994,12 @@ function baseFail(request, doneCallback) {
     if(request.responseText) {
         dbgPrint("Response: " + request.responseText);
     }
-    
+
     doneCallback(false, request);
 }
 
 function parseAll(json, groupModel, lightModel, doneCallback) {
-    // Delete current list, even in case of errors 
+    // Delete current list, even in case of errors
     // we do not want a cached one
     groupModel.clear();
     lightModel.clear();
@@ -1021,7 +1021,7 @@ function parseAll(json, groupModel, lightModel, doneCallback) {
             }
         }
     }
-    
+
     for(var resultName in myResult) {
         if(resultName === "groups") {
             var myGroups = myResult[resultName];
@@ -1051,26 +1051,26 @@ function parseAll(json, groupModel, lightModel, doneCallback) {
                     myGroup.vx = 0;
                     myGroup.xy = 0;
                 }
-                
+
                 if(cgroup.action.hue || cgroup.action.sat || cgroup.action.xy) {
                     myGroup.vHasColour = true;
                 }
                 else {
                     myGroup.vHasColour = false;
                 }
-                
+
                 if(cgroup.action.ct) {
                     myGroup.vHasTemperature = true;
                 }
                 else {
                     myGroup.vHasTemperature = false;
                 }
-                
+
                 myGroup.vct = cgroup.action.ct  || 0;
                 myGroup.valert = cgroup.action.alert || i18n("Not available");
                 myGroup.vcolormode = cgroup.action.colormode  || "none";
                 myGroup.vLastUpdated = getCurrentTime();
-                
+
                 groupModel.append(myGroup);
             }
         }
@@ -1094,21 +1094,21 @@ function parseAll(json, groupModel, lightModel, doneCallback) {
                     myLight.vx = 0;
                     myLight.vy = 0;
                 }
-                
+
                 if(clight.state.hue || clight.state.sat || clight.state.xy) {
                     myLight.vHasColour = true;
                 }
                 else {
                     myLight.vHasColour = false;
                 }
-                
+
                 if(clight.state.ct){
                     myLight.vHasTemperature = true;
                 }
                 else {
                     myLight.vHasTemperature = false;
                 }
-                
+
                 myLight.vct = clight.state.ct || 0;
                 myLight.valert = clight.state.alert || i18n("Not available");
                 myLight.vcolormode = clight.state.colormode || "none";
@@ -1124,10 +1124,10 @@ function parseAll(json, groupModel, lightModel, doneCallback) {
                 lightModel.append(myLight);
             }
         }
-        
+
         //TODO: config, schedules, scenes, rules, sensors once we support them
     }
-    
+
     doneCallback(true, json);
 }
 
@@ -1150,7 +1150,7 @@ function parseGroupsToSimpleModel(json, listModel, name, doneCallback) {
             }
         }
     }
-    
+
     for(var groupName in myGroups) {
         var cgroup = myGroups[groupName];
         var myGroup = {};
@@ -1176,7 +1176,7 @@ function parseGroupsToSimpleModel(json, listModel, name, doneCallback) {
 }
 
 function parseGroupsToModel(json, listModel, name, doneCallback) {
-    // Delete current list, even in case of errors 
+    // Delete current list, even in case of errors
     // we do not want a cached one
     listModel.clear();
     try {
@@ -1197,7 +1197,7 @@ function parseGroupsToModel(json, listModel, name, doneCallback) {
             }
         }
     }
-    
+
     for(var groupName in myGroups) {
         var cgroup = myGroups[groupName];
         var myGroup = {};
@@ -1228,21 +1228,21 @@ function parseGroupsToModel(json, listModel, name, doneCallback) {
         myGroup.valert = cgroup.action.alert || i18n("Not available");
         myGroup.vcolormode = cgroup.action.colormode  || "none";
         myGroup.vLastUpdated = getCurrentTime();
-        
+
         if(cgroup.action.hue || cgroup.action.sat || cgroup.action.xy) {
             myGroup.vHasColour = true;
         }
         else {
             myGroup.vHasColour = false;
         }
-        
+
         if(cgroup.action.ct) {
             myGroup.vHasTemperature = true;
         }
         else {
             myGroup.vHasTemperature = false;
         }
-        
+
         listModel.append(myGroup);
     }
     doneCallback(true, json);
@@ -1267,7 +1267,7 @@ function parseGroupToObject(json, myObject, name, doneCallback) {
             }
         }
     }
-    
+
     myObject.vuuid = name;
     myObject.vname = cgroup.name || i18n("Not available");
     myObject.vtype = cgroup.type || i18n("Not available");
@@ -1291,28 +1291,28 @@ function parseGroupToObject(json, myObject, name, doneCallback) {
         myObject.vx = 0;
         myObject.xy = 0;
     }
-    
+
     myObject.vct = cgroup.action.ct  || 0;
     myObject.valert = cgroup.action.alert || i18n("Not available");
     myObject.vcolormode = cgroup.action.colormode  || "none";
     myObject.vLastUpdated = getCurrentTime();
-    
+
     if(cgroup.action.hue || cgroup.action.sat || cgroup.action.xy) {
         myObject.vHasColour = true;
     }
     else {
         myObject.vHasColour = false;
     }
-    
+
     if(cgroup.action.ct) {
         myObject.vHasTemperature = true;
     }
     else {
         myObject.vHasTemperature = false;
     }
-    
+
     doneCallback(true, json);
-    
+
 }
 
 function parseLightsToSimpleModel(json, listModel, name, doneCallback) {
@@ -1334,7 +1334,7 @@ function parseLightsToSimpleModel(json, listModel, name, doneCallback) {
             }
         }
     }
-    
+
     for(var lightName in myLights) {
         var cLight = myLights[lightName];
         var myLight = {};
@@ -1366,9 +1366,9 @@ function parseNewLights(json, listModel, name, doneCallback) {
             }
         }
     }
-    
+
     listModel.clear();
-    
+
     for(var lightName in myLights) {
         if(lightName != "lastscan") {
             var cLight = myLights[lightName];
@@ -1402,9 +1402,9 @@ function parseAvailableLightsToSimpleModel(json, listModel, name, doneCallback) 
             }
         }
     }
-    
+
     var usedLight = []
-    
+
     var myGroups = myResult["groups"];
     for(var groupName in myGroups) {
         var cgroup = myGroups[groupName];
@@ -1438,7 +1438,7 @@ function parseAvailableLightsToSimpleModel(json, listModel, name, doneCallback) 
         var txtNone = i18n("No lights without a room available");
         listModel.append({ uuid: "-1", name: txtNone, text: txtNone, value: txtNone})
     }
-    
+
     doneCallback(true, json);
 }
 
@@ -1480,14 +1480,14 @@ function parseAllLightsToModel(json, listModel, name, doneCallback) {
             myLight.vx = 0;
             myLight.vy = 0;
         }
-        
+
         if(clight.state.hue || clight.state.sat || clight.state.xy) {
             myLight.vHasColour = true;
         }
         else {
             myLight.vHasColour = false;
         }
-        
+
         myLight.vct = clight.state.ct || 0;
         myLight.valert = clight.state.alert || i18n("Not available");
         myLight.vcolormode = clight.state.colormode || "none";
@@ -1500,17 +1500,17 @@ function parseAllLightsToModel(json, listModel, name, doneCallback) {
         myLight.vswconfigid = clight.swconfigid || i18n("Not available");
         myLight.vproductid = clight.productid || i18n("Not available");
         myLight.vLastUpdated = getCurrentTime();
-        
+
         if(clight.state.ct){
             myLight.vHasTemperature = true;
         }
         else {
             myLight.vHasTemperature = false;
         }
-        
+
         listModel.append(myLight);
     }
-    
+
     doneCallback(true, json);
 }
 
@@ -1598,7 +1598,7 @@ function parseLightToModel(json, listModel, lightName, doneCallback) {
         myLight.vx = 0;
         myLight.vy = 0;
     }
-    
+
     myLight.vct = clight.state.ct || 0;
     myLight.valert = clight.state.alert || i18n("Not available");
     myLight.vcolormode = clight.state.colormode || "none";
@@ -1611,23 +1611,23 @@ function parseLightToModel(json, listModel, lightName, doneCallback) {
     myLight.vswconfigid = clight.swconfigid || i18n("Not available");
     myLight.vproductid = clight.productid || i18n("Not available");
     myLight.vLastUpdated = getCurrentTime();
-    
+
     if(clight.state.hue || clight.state.sat || clight.state.xy) {
         myLight.vHasColour = true;
     }
     else {
         myLight.vHasColour = false;
     }
-    
+
     if(clight.state.ct){
         myLight.vHasTemperature = true;
     }
     else {
         myLight.vHasTemperature = false;
     }
-    
+
     listModel.append(myLight);
-    
+
     doneCallback(true, json);
 }
 
@@ -1665,7 +1665,7 @@ function parseLightToObject(json, myObject, lightName, doneCallback) {
         myObject.vx = 0;
         myObject.vy = 0;
     }
-    
+
     myObject.vct = clight.state.ct || 0;
     myObject.valert = clight.state.alert || i18n("Not available");
     myObject.vcolormode = clight.state.colormode || "none";
@@ -1678,21 +1678,21 @@ function parseLightToObject(json, myObject, lightName, doneCallback) {
     myObject.vswconfigid = clight.swconfigid || i18n("Not available");
     myObject.vproductid = clight.productid || i18n("Not available");
     myObject.vLastUpdated = getCurrentTime();
-    
+
     if(clight.state.hue || clight.state.sat || clight.state.xy) {
         myObject.vHasColour = true;
     }
     else {
         myObject.vHasColour = false;
     }
-    
+
     if(clight.state.ct){
         myObject.vHasTemperature = true;
     }
     else {
         myObject.vHasTemperature = false;
     }
-    
+
     doneCallback(true, json);
 }
 
@@ -1715,7 +1715,7 @@ function parseSchedulesToSimpleModel(json, listModel, name, doneCallback) {
             }
         }
     }
-    
+
     for(var scheduleName in mySchedules) {
         var cSchedule = mySchedules[scheduleName];
         var mySchedule = {};
@@ -1742,7 +1742,7 @@ function parseSchedulesToSimpleModel(json, listModel, name, doneCallback) {
         }
         mySchedule.recycle = cSchedule.recycle || i18n("Not available");
         mySchedule.autodelete = cSchedule.autodelete || false
-        
+
         // Prefer localtime over time, as per Hue API
         if(cSchedule.localtime) {
             mySchedule.ptime = fmtTimeHumReadable(cSchedule.localtime, true)
@@ -1753,14 +1753,14 @@ function parseSchedulesToSimpleModel(json, listModel, name, doneCallback) {
         else {
             mySchedule.ptime = i18n("Not available");
         }
-        
+
         listModel.append(mySchedule);
     }
     doneCallback(true, json);
 }
 
 /**
- * Helper to clear a model and fill it with all supported room classes 
+ * Helper to clear a model and fill it with all supported room classes
  * @param {ListModel} myModel model to fill
  * Adds: name (Hue), translatedName (i18n), iconName (lowercase, stripped whitespace)
  */
@@ -1830,7 +1830,7 @@ function fillWithClassesForConfig(success, myConfig) {
  */
 function getCurrentTime() {
     var date = new Date();
-    return date.getMilliseconds(); 
+    return date.getMilliseconds();
 }
 
 /**
@@ -1850,9 +1850,9 @@ function fmtTimeHumReadable(strHueTime, isLocalTime) {
     var strRandom = "";
     var strRec = "";
     var strAbsolute = "";
-    
+
     var strReadable = "";
-    
+
     for (var i = 0, len = strHueTime.length; i < len; i++) {
         if(strHueTime[i] == "P" || strHueTime[i] == "/") {
             // we simply ignore these, as they are not needed
@@ -1863,8 +1863,8 @@ function fmtTimeHumReadable(strHueTime, isLocalTime) {
             continue;
         }
         if(strHueTime[i] == "W") {
-            isWeekly = true; 
-            continue; 
+            isWeekly = true;
+            continue;
         }
         if(strHueTime[i] == "T") {
             isTime = true;
@@ -1895,11 +1895,11 @@ function fmtTimeHumReadable(strHueTime, isLocalTime) {
             strAbsolute += strHueTime[i];
         }
     }
-    
+
     if(bitMask != "") {
         var numMask = parseInt(bitMask);
         var bits = arrayFromMask(numMask);
-        
+
         var F_MON = false;
         var F_TUE = false;
         var F_WED = false;
@@ -1907,7 +1907,7 @@ function fmtTimeHumReadable(strHueTime, isLocalTime) {
         var F_FRI = false;
         var F_SAT = false;
         var F_SUN = false;
-        
+
         if(bits.length = 7) {
             F_MON = bits[6]; // 0000001
             F_TUE = bits[5]; // 0000010
@@ -1917,9 +1917,9 @@ function fmtTimeHumReadable(strHueTime, isLocalTime) {
             F_SAT = bits[1]; // 0100000
             F_SUN = bits[0]; // 1000000
         }
-        
+
         strReadable += i18n("Every") + " ";
-        
+
         if(F_MON && F_TUE && F_WED && F_THU && F_FRI && F_SAT && F_SUN) {
             strReadable += i18n("day");
         }
@@ -1956,7 +1956,7 @@ function fmtTimeHumReadable(strHueTime, isLocalTime) {
     else {
         if(!isAbsolute) {
             if(!isRec) {
-                strReadable += i18n("Once") 
+                strReadable += i18n("Once")
             }
             else if (strRec) {
                 strReadable += strRec + " " + i18n("times");
@@ -1969,22 +1969,22 @@ function fmtTimeHumReadable(strHueTime, isLocalTime) {
             strReadable += i18n("At") + " " + strAbsolute + " ";
         }
     }
-    
-    
+
+
     if(strTime) {
         strReadable += " " + i18n("at") + " " + strTime;
         if(!isLocalTime) {
             strReadable += i18n("UTC");
         }
     }
-    
+
     if(strRandom) {
-        strReadable += " " + i18n("+ random:") + " " + strRandom; 
+        strReadable += " " + i18n("+ random:") + " " + strRandom;
         if(!isLocalTime) {
             strReadable += i18n("UTC");
         }
     }
-    
+
     return strReadable;
 }
 
@@ -2000,7 +2000,7 @@ function parseHueTimeString(strTime) {
     timeObj.isWeekly = false;
     timeObj.isOneTimer = false;
     timeObj.isAbsolute = false;
-    
+
     if(!strTime) {
         dbgPrint("Empty string, invalid");
         timeObj.valid = false;
@@ -2009,7 +2009,7 @@ function parseHueTimeString(strTime) {
     try {
         if(strTime.charAt(0) == "P") {
             timeObj.isOneTimer = true;
-            
+
         }
         else if(strTime.charAt(0) == "R") {
             timeObj.isReccuring = true;
@@ -2023,7 +2023,7 @@ function parseHueTimeString(strTime) {
                     rec += cha;
                 }
             }
-            
+
             if(rec && rec != "0") {
                 timeObj.rec = parseInt(rec);
                 timeObj.forever = false;
@@ -2045,10 +2045,10 @@ function parseHueTimeString(strTime) {
                     bitMask += cha;
                 }
             }
-            
+
             if(bitMask) {
                 var bits = arrayFromMask(bitMask);
-                
+
                 if(bits.length = 7) {
                     timeObj.onMon = bits[6]; // 0000001
                     timeObj.onTue = bits[5]; // 0000010
@@ -2075,7 +2075,7 @@ function parseHueTimeString(strTime) {
             timeObj.month = strTime.substring(5,7);
             timeObj.day = strTime.substring(8,10)
         }
-        
+
         var time = strTime.indexOf("T");
         if(time < 0) {
             timeObj.valid = false;
@@ -2085,7 +2085,7 @@ function parseHueTimeString(strTime) {
         timeObj.hours = parseInt(timeString.substring(0,2));
         timeObj.minutes = parseInt(timeString.substring(3,5));
         timeObj.seconds = parseInt(timeString.substring(6,8));
-        
+
         var rand = strTime.indexOf("A");
         if(rand < 0) {
             timeObj.hasRandom = false;
@@ -2097,9 +2097,9 @@ function parseHueTimeString(strTime) {
             timeObj.randMinutes = parseInt(timeString.substring(3,5));
             timeObj.randSeconds = parseInt(timeString.substring(6,8));
         }
-        
+
         return timeObj;
-        
+
     }
     catch (e) {
         dbgPrint("Error in parseHueTimeString: " + e);
@@ -2123,7 +2123,7 @@ function parseHopplaActionObject(pObj) {
     }
     try {
         var body = JSON.parse(pObj.payload);
-        
+
         commandObj = parseHueCommandPayload(body);
         commandObj.method = "PUT";
         commandObj.group = (pObj.ttype == "groups");
@@ -2144,26 +2144,26 @@ function parseHopplaActionObject(pObj) {
  */
 function parseHueCommandObject(pObj) {
     var commandObj = {};
-    
+
     if(!pObj) {
         dbgPrint("Empty Object, invalid");
         commandObj.valid = false;
         return commandObj;
     }
     try {
-        
+
         commandObj = parseHueCommandPayload(pObj.body);
-        
+
         var method = pObj.method;
         // We only support PUT for now
         if(method != "PUT") {
             commandObj.valid = false;
             return commandObj;
         }
-        
+
         var addr = pObj.address;
         var sAddr = addr.split("/")
-        // For now we also allow editing schedules created for someone else. 
+        // For now we also allow editing schedules created for someone else.
         // if that is not wanted, sAddr[2] has to be compared against
         // plasmoid.configuration.authToken
         var type = sAddr[3]
@@ -2188,7 +2188,7 @@ function parseHueCommandObject(pObj) {
 function parseHueCommandPayload(body) {
     var commandObj = {};
     commandObj.valid = true;
-    // For loop is needed to see if there are additional values we don't support. 
+    // For loop is needed to see if there are additional values we don't support.
     // In this case we mark the object as invalid, so that the editor preserves
     // the original values and they aren't lost on saving.
     for(var currentItem in body) {
@@ -2226,7 +2226,7 @@ function parseHueCommandPayload(body) {
             return commandObj;
         }
     }
-    
+
     return commandObj;
 }
 
@@ -2236,11 +2236,11 @@ function parseHueCommandPayload(body) {
  * @return {array} bitMask as array
  */
 function arrayFromMask (intMask) {
-    if (intMask > 0x7fffffff || intMask < -0x80000000) { 
-        dbgPrint("arrayFromMask: out of range"); 
+    if (intMask > 0x7fffffff || intMask < -0x80000000) {
+        dbgPrint("arrayFromMask: out of range");
         return [false,false,false,false,false,false,false];
     }
-    for (var nShifted = intMask, resultArray = []; nShifted; 
+    for (var nShifted = intMask, resultArray = []; nShifted;
          resultArray.push(Boolean(nShifted & 1)), nShifted >>>= 1);
     for (var i = resultArray.length; i < 7; ++i) {
         resultArray.push(false)
@@ -2258,12 +2258,12 @@ function getHueIp (callback) {
         if (request.readyState !== XMLHttpRequest.DONE) {
             return;
         }
-        
+
         if (request.status !== 200) {
             callback(false, "");
             return;
         }
-        
+
         var json = request.responseText;
         var result = JSON.parse(json);
         if(result && result.length > 0) {

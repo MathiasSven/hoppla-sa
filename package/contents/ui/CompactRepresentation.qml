@@ -59,26 +59,26 @@ MouseArea {
         anchors.fill: parent
         source: plasmoid.icon
     }
-    
+
     property bool fullRepresentationInitialized: false
 
     Component.onCompleted: {
         getHueConfigured();
         resetTimer();
     }
-    
+
         Connections {
         target: plasmoid.configuration
 
         onPollChanged: {
             resetTimer();
         }
-        
+
         onPollTimeChanged: {
             resetTimer();
         }
     }
-    
+
     // Method to restart the poll timer with configured values
     function resetTimer() {
         compactTimer.stop();
@@ -90,7 +90,7 @@ MouseArea {
             compactTimer.start();
         }
     }
-    
+
     /**
      * Helper function executed periodically.
      * Checks the connection and if  there is a connection to
@@ -105,7 +105,7 @@ MouseArea {
             resetTimer();
         }
     }
-    
+
     //TODO: Unify with full rep
     /**
      * Helper to check the updated connection
@@ -134,7 +134,7 @@ MouseArea {
             plasmoid.status = PlasmaCore.Types.ActiveStatus;
             getLights(lightModel)
             setLightsTooltip(i18n("Alternative connection"));
-        
+
         }
     }
 
@@ -145,7 +145,7 @@ MouseArea {
     function setLightsTooltip(baseText) {
 
         var myLights = lightModel;
-        
+
         var lightsTotal = myLights.count;
         if (lightsTotal > 0) {
             var lightOn = 0;
@@ -164,8 +164,8 @@ MouseArea {
     Timer {
         id: compactTimer
     }
-    
+
     ListModel {
         id: lightModel
-    }  
+    }
 }
