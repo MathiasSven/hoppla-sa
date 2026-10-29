@@ -361,9 +361,9 @@ PlasmaExtras.Representation {
             var actionItem = {};
             actionItem.uuid = uuid;
             actionItem.userAdded = cItem.userAdded;
-            actionItem.title = cItem.userAdded ? cItem.title : i18n(cItem.title);
-            actionItem.subtitle = cItem.userAdded ? cItem.subtitle : i18n(cItem.subtitle);
-            actionItem.icon = cItem.icon;
+            actionItem.actionTitle = cItem.userAdded ? cItem.title : i18n(cItem.title);
+            actionItem.actionSubtitle = cItem.userAdded ? cItem.subtitle : i18n(cItem.subtitle);
+            actionItem.actionIconName = cItem.icon;
             actionItem.actions = cItem.actions;
 
             actionModel.append(actionItem);

@@ -21,21 +21,23 @@ import QtQuick
 import QtQuick.Layouts
 import org.kde.plasma.core as PlasmaCore
 import org.kde.plasma.components as PlasmaComponents
+import org.kde.plasma.components as PC3
 import org.kde.plasma.extras as PlasmaExtras
-import org.kde.ksvg as KSvg
 import org.kde.kirigami as Kirigami
 
 import "../code/hue.js" as Hue
 
-PlasmaComponents.ItemDelegate {
+Item {
     id: actionItem
 
     property int baseHeight : 40
     property string defaultIcon : "help-about"
+    required property string actionTitle
+    required property string actionSubtitle
+    required property string actionIconName
 
-    height:  Math.max(Kirigami.Units.iconSizes.medium, actionLabel.height + actionInfoLabel.height) + Math.round(Kirigami.Units.gridUnit / 2)
-    enabled: true
-    hoverEnabled: true
+    width: ListView.view ? ListView.view.width : 0
+    height: actionItemBase.height
 
     Item {
         id: actionItemBase
@@ -48,13 +50,11 @@ PlasmaComponents.ItemDelegate {
             topMargin: -Math.round(Kirigami.Units.gridUnit / 3)
         }
 
-        height: Math.max(Kirigami.Units.iconSizes.medium, actionLabel.height + actionInfoLabel.height) + Math.round(Kirigami.Units.gridUnit / 2)
+        height: Math.max(Kirigami.Units.iconSizes.medium,
+                         actionLabel.implicitHeight + actionInfoLabel.implicitHeight + Kirigami.Units.smallSpacing)
+                + Math.round(Kirigami.Units.gridUnit / 2)
 
-        KSvg.Svg {
-            id: mySvg
-        }
-
-        KSvg.SvgItem {
+        Image {
             id: actionIcon
 
             anchors {
@@ -64,7 +64,8 @@ PlasmaComponents.ItemDelegate {
 
             height: Kirigami.Units.iconSizes.medium
             width: height
-            svg: mySvg
+            source: Qt.resolvedUrl("../images/" + (actionIconName || defaultIcon))
+            fillMode: Image.PreserveAspectFit
         }
 
         PlasmaComponents.Label {
@@ -73,16 +74,16 @@ PlasmaComponents.ItemDelegate {
             anchors {
                 top: parent.top
                 topMargin: Kirigami.Units.smallSpacing
-                bottom: actionIcon.verticalCenter
                 left: actionIcon.right
                 leftMargin: Math.round(Kirigami.Units.gridUnit / 2)
                 right: executeButton.visible ? executeButton.left : parent.right
+                rightMargin: Kirigami.Units.smallSpacing
             }
 
-            height: paintedHeight
+            height: implicitHeight
             elide: Text.ElideRight
             font.weight: Font.Normal
-            text: title
+            text: actionTitle
             textFormat: Text.PlainText
         }
 
@@ -96,15 +97,15 @@ PlasmaComponents.ItemDelegate {
                 topMargin: Kirigami.Units.smallSpacing
             }
 
-            height: paintedHeight
+            height: implicitHeight
             elide: Text.ElideRight
             //TODO: PortMe font.pointSize: theme.smallestFont.pointSize
             opacity: 0.6
-            text: subtitle
+            text: actionSubtitle
             textFormat: Text.PlainText
         }
 
-        PlasmaComponents.Button {
+        PC3.Button {
             id: executeButton
 
             anchors {
@@ -113,17 +114,12 @@ PlasmaComponents.ItemDelegate {
                 verticalCenter: actionIcon.verticalCenter
             }
 
-            text: i18n("OK")
-            // Plasma 6 ItemDelegate does not enable hover tracking by default.
-            // Keep the action available for pointer, touch, and keyboard users.
-            visible: true
-
+            width: Kirigami.Units.gridUnit * 3
+            height: Kirigami.Units.gridUnit * 2
+            text: i18n("Run")
             onClicked: execute()
         }
 
-        Component.onCompleted: {
-             mySvg.imagePath = Qt.resolvedUrl("../images/" + icon);
-        }
     }
 
     function execute() {
