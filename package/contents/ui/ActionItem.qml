@@ -35,6 +35,7 @@ Item {
     required property string actionTitle
     required property string actionSubtitle
     required property string actionIconName
+    required property var actionPayloads
 
     width: ListView.view ? ListView.view.width : 0
     height: actionItemBase.height
@@ -124,7 +125,7 @@ Item {
 
     function execute() {
 
-        var myActions = actions
+        var myActions = actionPayloads
         for (var i = 0; i < myActions.count; i++) {
             var act = myActions.get(i);
             if(act.ttype === "groups") {
