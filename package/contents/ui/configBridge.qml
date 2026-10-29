@@ -23,7 +23,6 @@ import org.kde.plasma.core as PlasmaCore
 import org.kde.coreaddons as KCoreAddons
 import org.kde.kirigami as Kirigami
 import "../code/hue.js" as Hue
-import org.kde.kirigami as Kirigami
 import org.kde.kcmutils as KCM
 
 KCM.SimpleKCM {
@@ -45,12 +44,7 @@ KCM.SimpleKCM {
     property string errorColour: "#ff0000"
     property string successColour: "#00aa00"
 
-    Item {
-        width: parent.width
-        anchors.left: parent.left
-        anchors.right: parent.right
-
-        ColumnLayout {
+    ColumnLayout {
             Layout.fillWidth: true
             anchors.left: parent.left
             anchors.right: parent.right
@@ -58,8 +52,6 @@ KCM.SimpleKCM {
             GroupBox {
                 id: grpStatus
                 Layout.fillWidth: true
-                anchors.left: parent.left
-                anchors.right: parent.right
                 // flat: true
                 visible: false
 
@@ -101,8 +93,6 @@ KCM.SimpleKCM {
             GroupBox {
                 id: grpMain
                 Layout.fillWidth: true
-                anchors.left: parent.left
-                anchors.right: parent.right
                 // flat: true
 
                 GridLayout {
@@ -174,9 +164,6 @@ KCM.SimpleKCM {
 
             GroupBox {
                 Layout.fillWidth: true
-                anchors.left: parent.left
-                anchors.right: parent.right
-                anchors.top: altConnectionCb.bottom
                 // flat: true
                 visible: altConnectionCb.checked
 
@@ -232,7 +219,6 @@ KCM.SimpleKCM {
                     }
                 }
             }
-        }
     }
 
     function findBridge() {
