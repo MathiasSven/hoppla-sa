@@ -34,6 +34,17 @@ PlasmaExtras.Representation {
 
     KeyNavigation.down: tabBar.currentItem
 
+    readonly property var tabNames: [
+        "actions",
+        "groups",
+        "lights"
+    ]
+
+    readonly property string requestedTab:
+        Qt.application.arguments.find(arg => tabNames.includes(arg)) ?? "actions"
+
+    readonly property int initialTab:
+        Math.max(0, tabNames.indexOf(requestedTab))
 
     header: PlasmaExtras.PlasmoidHeading {
         // Make this toolbar's buttons align vertically with the ones above
@@ -49,7 +60,7 @@ PlasmaExtras.Representation {
                 id: tabBar
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-
+                currentIndex: fullRep.initialTab
 
                 // KeyNavigation.down: contentView.currentItem.contentItem.upperListView.itemAtIndex(0)
 
@@ -93,7 +104,12 @@ PlasmaExtras.Representation {
     contentItem: StackView {
         id: contentView
         property var hiddenTypes: []
-        initialItem: actionsView
+        readonly property var views: [
+            actionsView,
+            groupsView,
+            lightsView
+        ]
+        initialItem: views[fullRep.initialTab]
 
         TwoPartView {
             id: actionsView
@@ -119,16 +135,14 @@ PlasmaExtras.Representation {
             placeholderText: i18n("no lights")
         }
 
-
         Connections {
             target: tabBar
+
             function onCurrentIndexChanged() {
-                if (tabBar.currentItem === actionsTab) {
-                    contentView.replace(actionsView)
-                } else if (tabBar.currentItem === groupsTab) {
-                    contentView.replace(groupsView)
-                } else if (tabBar.currentItem === lightsTab) {
-                    contentView.replace(lightsView)
+                const index = tabBar.currentIndex
+
+                if (index >= 0 && index < contentView.views.length) {
+                    contentView.replace(contentView.views[index])
                 }
             }
         }
